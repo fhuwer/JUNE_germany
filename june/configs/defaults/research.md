@@ -45,6 +45,11 @@ Patienten pro Mediziner:
 - - ~0.94 %
 - - davon 234.513 an Grundschulen ~30%
 
+### Groups
+#### leisure/cinemas
+- ca 105.435.400 Kinobesucher 2019
+- - [source](https://de.statista.com/themen/48/kino/#:~:text=Rund%205%2C27%20Millionen%20Deutsche,pro%20Einwohner%20in%20Deutschland%20gez%C3%A4hlt.)
+
 ### HomeOffice
 - 25% im Homeoffice beschäftigt Stand 8.12.20
 - - [source](https://www.bitkom.org/Presse/Presseinformation/Mehr-als-10-Millionen-arbeiten-ausschliesslich-im-Homeoffice#:~:text=3%2C2%20Millionen%20(8%20Prozent,6%2C3%20Millionen)%20teilweise.)
