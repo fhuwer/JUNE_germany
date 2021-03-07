@@ -44,6 +44,14 @@ Patienten pro Mediziner:
 - - [source](https://de.statista.com/statistik/daten/studie/162263/umfrage/anzahl-der-lehrkraefte-nach-schularten/#:~:text=Im%20Schuljahr%202019%2F2020%20arbeiteten,782.613%20Lehrkr%C3%A4fte%20an%20allgemeinbildenden%20Schulen.)
 - - ~0.94 %
 - - davon 234.513 an Grundschulen ~30%
+- 682.942 Fachkräfte Kinderbetreuung
+- - [source](https://de.statista.com/statistik/daten/studie/1011406/umfrage/fachkraefte-in-der-kinderbetreuung-in-deutschland/#:~:text=M%C3%A4rz%202020%20wurden%20bundesweit%20knapp,in%20Einrichtungen%20der%20Kindertagesbetreuung%20t%C3%A4tig.)
+- - 0,822 %
+- 48.547 Professoren
+- - [source](https://de.statista.com/statistik/daten/studie/160365/umfrage/professoren-und-professorinnen-an-deutschen-hochschulen/#:~:text=Die%20Statistik%20zeigt%20die%20Anzahl,Professoren%20und%2012.408%20hauptberufliche%20Professorinnen.)
+- - 0,05848 %
+- Gesamt: 1,82378 %
+
 
 ### Groups
 #### leisure/cinemas
