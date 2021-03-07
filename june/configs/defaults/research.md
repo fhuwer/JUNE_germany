@@ -37,8 +37,11 @@ Patienten pro Mediziner:
 - - [source](https://de.statista.com/statistik/daten/studie/243449/umfrage/anzahl-der-beschaeftigten-krankenschwestern-und-hebammen-in-deutschland/#:~:text=Am%2031.,Hebammen%20und%20Rettungsdienstler%20in%20Deutschland.)
 - - 402100 berufstätige Ärzte
 - - [source](https://de.statista.com/themen/576/aerzte/)
-- - zusammen: 1.515.083: 1,82496%
-- 5.57 Millionen im gesamten Gesundheitssektor
+- 796.489 Angestellte in Pflegeheimen
+- - [source](https://de.statista.com/statistik/daten/studie/412574/umfrage/pflegeheime-anzahl-des-personals-nach-taetigkeitsbereich/#:~:text=Die%20Statistik%20zeigt%20die%20Anzahl,der%20Gesch%C3%A4ftsf%C3%BChrung%20deutscher%20Pflegeheime%20t%C3%A4tig.)
+- zusammen: 2.311.572: 2,78436%
+
+- ABER andere Quelle sagt insgesamt 5.57 Millionen angestellte im gesamten Gesundheitssektor
 - - [source](https://www.bundesgesundheitsministerium.de/themen/gesundheitswesen/gesundheitswirtschaft/gesundheitswirtschaft-als-jobmotor.html#:~:text=Im%20Gesundheitswesen%20arbeiten%20derzeit%205,um%201%2C6%20Millionen%20zugenommen.)
 
 	
