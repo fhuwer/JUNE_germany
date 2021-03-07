@@ -1,11 +1,11 @@
 age_range: [18, 64]
 sub_sector_ratio:
   P:  # education
-    m: 0.02492507  # male + Wert laut research ca 0.005
+    m: 0.02492507  # male, Wert laut research ca 1.8% zusammen
     f: 0.02726422  # female
   Q:  # healthcare
-    m: 0.02498335 #Wert laut research 0.0625
-    f: 0.02024475 
+    m: 0.0163705
+    f: 0.0507218
 
 sub_sector_distr:
   P:
