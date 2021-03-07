@@ -33,10 +33,12 @@ Patienten pro Mediziner:
 
 ### worker distribution TODO
 - 5.57 Millionen Menschen im Gesundheitssektor
-- - 1.1 Millionen Krankenschwestern/-pfleger
+- - 1.112.983 Krankenschwestern/-pfleger
 - - [source](https://de.statista.com/statistik/daten/studie/243449/umfrage/anzahl-der-beschaeftigten-krankenschwestern-und-hebammen-in-deutschland/#:~:text=Am%2031.,Hebammen%20und%20Rettungsdienstler%20in%20Deutschland.)
 - - 402100 berufstätige Ärzte
 - - [source](https://de.statista.com/themen/576/aerzte/)
+- gesamt: 1.515.083: 1,82496%
+- 5.57 Millionen im gesamten Gesundheitssektor
 - - [source](https://www.bundesgesundheitsministerium.de/themen/gesundheitswesen/gesundheitswirtschaft/gesundheitswirtschaft-als-jobmotor.html#:~:text=Im%20Gesundheitswesen%20arbeiten%20derzeit%205,um%201%2C6%20Millionen%20zugenommen.)
 
 	
