@@ -14,8 +14,8 @@ sub_sector_distr:
     f: [0.7, 0.3]
   Q:
     label: ["doctor", "nurse"]
-    m: [0.65350126, 0.34649874]
-    f: [0.16103136, 0.83896864]
+    m: [0.4960939, 0.5039061]
+    f: [0.1704536, 0.8295464]
 
 # home = work from home
 # bind = send to random SuperArea within simulated geography
