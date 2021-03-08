@@ -37,7 +37,10 @@ Patienten pro Mediziner:
 - - [source](https://de.statista.com/statistik/daten/studie/243449/umfrage/anzahl-der-beschaeftigten-krankenschwestern-und-hebammen-in-deutschland/#:~:text=Am%2031.,Hebammen%20und%20Rettungsdienstler%20in%20Deutschland.)
 - - 402100 berufstätige Ärzte
 - - [source](https://de.statista.com/themen/576/aerzte/)
-- Verhältnis Krankenschwester / Arzt: 73,4602% Krankenschwestern, 26,54% Ärzte
+- Verhältnis Krankenpfleger / Arzt: 73,4602% Krankenpfleger, 26,54% Ärzte
+- 54.5% männliche Ärzte, 20% Männer Krankenpfleger
+- - [source Pfleger](https://de.statista.com/statistik/daten/studie/1029877/umfrage/verteilung-von-pflegekraefte-in-deutschland-nach-pflegeart-und-geschlecht/)
+- - [source Ärzte](https://de.statista.com/statistik/daten/studie/553309/umfrage/verteilung-von-krankenhausaerzten-in-deutschland-nach-geschlecht/)
 
 - 796.489 Angestellte in Pflegeheimen
 - - [source](https://de.statista.com/statistik/daten/studie/412574/umfrage/pflegeheime-anzahl-des-personals-nach-taetigkeitsbereich/#:~:text=Die%20Statistik%20zeigt%20die%20Anzahl,der%20Gesch%C3%A4ftsf%C3%BChrung%20deutscher%20Pflegeheime%20t%C3%A4tig.)
