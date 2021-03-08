@@ -87,3 +87,9 @@ Patienten pro Mediziner:
 ### Effectiveness of Facemask 
 - ca 70% weniger Viren übertragen
 - - [source](https://msphere.asm.org/content/msph/5/5/e00637-20.full.pdf)
+
+### Infection Transmisson
+- "Under baseline assumptions, approximately 59% of all transmission came from asymptomatic transmission: 35% from presymptomatic individuals and 24% from individuals who are never symptomatic"
+- Peak infection ~day 4-6
+- - [source](https://jamanetwork.com/journals/jamanetworkopen/article-abstract/2774707)
+- - Daten von einem Paper, das 07.01.2021 veröffentlich wurde, 07.12.20 wurde das Paper eingereicht
