@@ -90,7 +90,7 @@ class HouseholdDistributor:
         max_age_to_be_parent=64,
         max_household_size=8,
         allowed_household_compositions: dict = None,
-        ignore_orphans:bool  = False,
+        ignore_orphans:bool  = True,
     ):
         """
         Tool to populate areas with households and fill them with the correct
@@ -1187,9 +1187,10 @@ class HouseholdDistributor:
 #                plt.hist(ages, bins=np.arange(0,100))
 #                plt.show()
 #
-                raise HouseholdError(
-                    "Orphan kid. Check household configuration and population."
-                )
+                logger.info(f"Orphan kid ({first_kid.age}) in the output area: {area.name}")
+                #  raise HouseholdError(
+                #      "Orphan kid. Check household configuration and population."
+                #  )
             if first_parent is not None:
                 self._add_to_household(household, first_parent, subgroup="adults")
             else:
