@@ -690,6 +690,11 @@ class HouseholdDistributor:
             <= len(all_households)
             <= total_number_of_households
         ):
+            logger.info(f"Number of households does not match for the following output area: {area.name}.")
+            logger.info(f"    total_number_of_households: {total_number_of_households}")
+            logger.info(f"    communal_houses: {communal_houses}")
+            logger.info(f"    len(all_households): {len(all_households)}")
+            logger.info(f"    total_number_of_households: {total_number_of_households}")
             raise HouseholdError("Number of households does not match.")
         people_in_households = 0
         # convert permanent residents list to tuples
