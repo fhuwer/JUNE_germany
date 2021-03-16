@@ -144,13 +144,13 @@ class WorkerDistributor:
         )
         self.work_msoa_woman_rnd = work_msoa_woman_rv.rvs(size=n_workers)
         # companies data
-        numbers = np.arange(1, 22)
         m_col = [col for col in self.sex_per_sector_df.columns.values if "m " in col]
 
         f_col = [col for col in self.sex_per_sector_df.columns.values if "f " in col]
         self.sector_dict = {
             (idx + 1): col.split(" ")[-1] for idx, col in enumerate(m_col)
         }
+        numbers = np.arange(1, len(self.sector_dict) + 1)
         try:
             # fails if no female work in this Area
             distribution_female = (
