@@ -994,7 +994,7 @@ class HouseholdDistributor:
             Number of student houses in this area.
         """
         if n_students == 0:
-            return
+            return []
         # students per household
         ratio = max(int(n_students / student_houses_number), 1)
         # get all people in the students age
