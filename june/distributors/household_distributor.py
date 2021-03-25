@@ -394,7 +394,7 @@ class HouseholdDistributor:
         # time.sleep(0.01)
 
         if not men_by_age and not women_by_age:
-            raise HouseholdError("No people in Area!")
+            logger.info(f"No people living in Area {area.name}!")
         total_number_of_households = 0
         for key in number_households_per_composition:
             total_number_of_households += number_households_per_composition[key]
