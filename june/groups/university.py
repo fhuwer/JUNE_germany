@@ -91,17 +91,14 @@ class Universities(Supergroup):
         coordinates = np.array(list(zip(latitudes, longitudes)))
         n_students = universities_df["n_students"].values
         ukprn_values = universities_df["UKPRN"].values
-        area = universities_df["oa"].values
         universities = []
-        a = []
-        for ar in areas.members:
-            a.append(ar.name)
-        areas_name = a
-        for coord, n_stud, ukprn, ar in zip(coordinates, n_students, ukprn_values, area):
-            if ar in areas_name:
-                a = areas[areas_name.index(ar)]
+
+        areas_from_file = universities_df["oa"].values
+        area_names = [area.name for area in areas.members]
+        for coord, n_stud, ukprn, ar in zip(coordinates, n_students, ukprn_values, areas_from_file):
+            if ar in area_names:
                 university = University(
-                    area=a, n_students_max=n_stud, ukprn=ukprn, coordinates=coord
+                    area=areas[area_names.index(ar)], n_students_max=n_stud, ukprn=ukprn, coordinates=coord
                 )
                 universities.append(university)
         logger.info(f"There are {len(universities)} universities in this world.")
