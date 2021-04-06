@@ -17,12 +17,14 @@ social_venues_spec_mapper = {
     "care_home_visits": "care_homes",
     "cinemas": "cinemas",
     "groceries": "groceries",
+    "gyms": "gyms",
 }
 
 super_group_to_group_mapper = {
     "pubs": "pub",
     "groceries": "grocery",
     "cinemas": "cinema",
+    "gyms": "gym",
 }
 
 

@@ -11,10 +11,11 @@ from june.groups.leisure import (
     PubDistributor,
     GroceryDistributor,
     CinemaDistributor,
+    GymDistributor,
     HouseholdVisitsDistributor,
     CareHomeVisitsDistributor,
 )
-from june.groups.leisure import Pubs, Cinemas, Groceries
+from june.groups.leisure import Pubs, Cinemas, Groceries, Gyms
 from june.groups import Household, ExternalSubgroup, Households
 from june.utils import random_choice_numba
 from june import paths
@@ -73,6 +74,17 @@ def generate_leisure_for_world(list_of_leisure_groups, world):
         else:
             leisure_distributors["groceries"] = GroceryDistributor.from_config(
                 world.groceries
+            )
+    if "gyms" in list_of_leisure_groups:
+        if (
+            not hasattr(world, "gyms")
+            or world.gyms is None
+            or len(world.gyms) == 0
+        ):
+            logger.warning("No gyms in this world/domain")
+        else:
+            leisure_distributors["gyms"] = GymDistributor.from_config(
+                    world.gyms
             )
     if "care_home_visits" in list_of_leisure_groups:
         if not hasattr(world, "care_homes"):

@@ -138,6 +138,7 @@ social_distancing:
             pub: 0.875
             grocery: 0.875
             cinema: 0.875
+            gym: 0.875
             commute_unit: 0.875
             commute_city_unit: 0.875
             hospital: 0.875
@@ -155,6 +156,7 @@ social_distancing:
             pub: 0.75
             grocery: 0.75
             cinema: 0.75
+            gym: 0.75
             commute_unit: 0.75
             commute_city_unit: 0.75
             hospital: 0.75
@@ -171,6 +173,7 @@ social_distancing:
             pub: 0.875
             grocery: 0.875
             cinema: 0.875
+            gym: 0.875
             commute_unit: 0.875
             commute_city_unit: 0.875
             hospital: 0.875
@@ -191,6 +194,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -209,6 +213,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -227,6 +232,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -245,6 +251,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -263,6 +270,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -281,6 +289,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -299,6 +308,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -317,6 +327,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -335,6 +346,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -353,6 +365,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -371,6 +384,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -389,6 +403,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -408,6 +423,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             commute_unit: 1.
             commute_city_unit: 1.
             hospital: 0.
@@ -421,7 +437,7 @@ mask_wearing:
 close_leisure_venue:
     start_time: 2020-03-21
     end_time: 2020-07-04 
-    venues_to_close: ['pub', 'cinema', 'care_home_visit'] 
+    venues_to_close: ['pub', 'cinema', 'gym', 'care_home_visit'] 
 
 change_leisure_probability:
     1:

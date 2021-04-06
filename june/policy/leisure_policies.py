@@ -53,7 +53,7 @@ class CloseLeisureVenue(LeisurePolicy):
         self,
         start_time: Union[str, datetime.datetime],
         end_time: Union[str, datetime.datetime],
-        venues_to_close=("cinemas", "groceries"),
+        venues_to_close=("cinemas", "groceries", "gyms"),
     ):
         """
         Template for policies that will close types of leisure venues

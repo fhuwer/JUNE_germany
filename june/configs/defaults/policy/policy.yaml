@@ -216,6 +216,7 @@ social_distancing:
             pub: 0.875
             grocery: 0.875
             cinema: 0.875
+            gym: 0.875
             city_transport: 0.875
             inter_city_transport: 0.875
             hospital: 0.875
@@ -233,6 +234,7 @@ social_distancing:
             pub: 0.75
             grocery: 0.75
             cinema: 0.75
+            gym: 0.75
             city_transport: 0.75
             inter_city_transport: 0.75
             hospital: 0.75
@@ -249,6 +251,7 @@ social_distancing:
             pub: 0.786
             grocery: 0.786
             cinema: 0.786
+            gym: 0.786
             city_transport: 0.786
             inter_city_transport: 0.786
             hospital: 0.786
@@ -266,6 +269,7 @@ social_distancing:
             pub: 0.875
             grocery: 0.875
             cinema: 0.875
+            gym: 0.875
             city_transport: 0.875
             inter_city_transport: 0.875
             hospital: 0.875
@@ -283,6 +287,7 @@ social_distancing:
             pub: 0.75
             grocery: 0.75
             cinema: 0.75
+            gym: 0.75
             city_transport: 0.75
             inter_city_transport: 0.75
             hospital: 0.75
@@ -301,6 +306,7 @@ social_distancing:
             pub: 0.875
             grocery: 0.875
             cinema: 0.875
+            gym: 0.875
             city_transport: 0.875
             inter_city_transport: 0.875
             hospital: 0.875
@@ -322,6 +328,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -340,6 +347,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -358,6 +366,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -376,6 +385,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -394,6 +404,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -412,6 +423,7 @@ mask_wearing:
             pub: 0.
             grocery: 0.5
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -430,6 +442,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -448,6 +461,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -466,6 +480,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -484,6 +499,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -502,6 +518,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -520,6 +537,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -539,6 +557,7 @@ mask_wearing:
             pub: 0.
             grocery: 1.
             cinema: 0.
+            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
             hospital: 0.
@@ -553,11 +572,11 @@ close_leisure_venue:
     1:
         start_time: 2020-03-21
         end_time: 2020-07-04 
-        venues_to_close: ['pub', 'cinema', 'care_home_visit']
+        venues_to_close: ['pub', 'cinema', 'gym', 'care_home_visit']
     2:
         start_time: 2020-11-05
         end_time: 2020-12-03 
-        venues_to_close: ['pub', 'cinema', 'care_home_visit'] 
+        venues_to_close: ['pub', 'cinema', 'gym', 'care_home_visit'] 
 
 change_leisure_probability:
     1:

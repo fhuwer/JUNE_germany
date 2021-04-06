@@ -28,6 +28,7 @@ spec_mapper = {
     "pub": "pubs",
     "grocery": "groceries",
     "cinema": "cinemas",
+    "gym": "gyms",
 }
 
 

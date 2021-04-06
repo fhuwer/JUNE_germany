@@ -31,6 +31,7 @@ possible_groups = [
     "pubs",
     "groceries",
     "cinemas",
+    "gyms",
 ]
 
 
@@ -78,6 +79,7 @@ class World:
         self.pubs = None
         self.groceries = None
         self.cinemas = None
+        self.gyms = None
         self.cemeteries = None
         self.universities = None
         self.box_mode = False

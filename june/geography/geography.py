@@ -410,6 +410,7 @@ class Geography:
         self.pubs = None
         self.cinemas = None
         self.groceries = None
+        self.gyms = None
         self.cemeteries = None
         self.universities = None
 

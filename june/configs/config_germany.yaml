@@ -1,0 +1,34 @@
+title: German configuration
+
+activity_to_super_groups:
+  medical_facility: ["hospitals"]
+  primary_activity: ['schools', 'companies', 'universities']
+  leisure: ['pubs', 'cinemas', 'gyms', 'household_visits', 'care_home_visits']
+  residence: ['households', 'care_homes']
+  commute: []
+
+time:
+  total_days: 45
+  initial_day: "2020-03-01"
+  step_duration:
+      weekday:
+          # Index: Duration in hours (so 3 timesteps, 24h in total)
+          0: 8   #  8 - 16
+          1: 6   # 16 - 22
+          2: 10  # 22 -  8
+      weekend:
+          0: 4   #  8 - 12
+          1: 4   # 12 - 16
+          2: 4   # 16 - 20
+          3: 12  # 20 -  8
+  step_activities:
+      weekday:
+          # Simulate these activities on the days
+          0: ['medical_facility', 'primary_activity', 'leisure', 'residence']
+          1: ['medical_facility', 'leisure', 'residence']
+          2: ['medical_facility', 'residence']
+      weekend:
+          0: ['medical_facility', 'leisure', 'residence']
+          1: ['medical_facility', 'leisure', 'residence']
+          2: ['medical_facility', 'leisure', 'residence']
+          3: ['medical_facility', 'residence']

@@ -9,6 +9,7 @@ betas:
  pub: 0.42941 
  grocery: 0.04137
  cinema: 0.157461
+ gym: 0.4
  city_transport: 0.107969 
  inter_city_transport: 0.3830 
  hospital: 0.1168
@@ -69,6 +70,11 @@ contact_matrices:
     contacts: [[3]]
     proportion_physical: [[0.12]]
     characteristic_time: 3
+
+  gym:
+    contacts: [[3]]
+    proportional_physical: [[0.12]]
+    characteristic_time: 2
 
   city_transport:
     contacts: [[6]]
