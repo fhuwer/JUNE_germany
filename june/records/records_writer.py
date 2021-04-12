@@ -23,6 +23,7 @@ from june.records.event_records_writer import (
     DeathsRecord,
     RecoveriesRecord,
     SymptomsRecord,
+    TestingRecord
 )
 from june.records.static_records_writer import (
     PeopleRecord,
@@ -56,6 +57,7 @@ class Record:
             pass
         with tables.open_file(self.record_path / self.filename, mode="w") as self.file:
             self.events = {
+                "tests": TestingRecord(hdf5_file=self.file),
                 "infections": InfectionRecord(hdf5_file=self.file),
                 "hospital_admissions": HospitalAdmissionsRecord(hdf5_file=self.file),
                 "icu_admissions": ICUAdmissionsRecord(hdf5_file=self.file),
@@ -82,7 +84,7 @@ class Record:
                 header.append("current_" + field)
                 header.append("daily_" + field)
             header.extend(
-                ["current_susceptible", "daily_hospital_deaths", "daily_deaths"]
+                ["current_susceptible", "daily_hospital_deaths", "daily_deaths","daily_true_pos_tests", "daily_false_pos_tests",  "daily_neg_tests"]
             )
             writer.writerow(header)
         description = {
@@ -166,6 +168,22 @@ class Record:
                 region = world.hospitals.get_from_id(hospital_id).region_name
                 daily_deaths_in_hospital[region] += 1
         return daily_deaths, daily_deaths_in_hospital
+    
+    def summarise_tests(self, world="World"):
+        daily_true_pos_tests, daily_false_pos_tests, daily_neg_tests = defaultdict(int), defaultdict(int), defaultdict(int)
+        for i, person_id in enumerate(self.events["tests"].true_positive_ids):
+            if person_id > -1:
+                region = world.people.get_from_id(person_id).super_area.region.name
+                daily_true_pos_tests[region] += 1
+        for i, person_id in enumerate(self.events["tests"].false_positive_ids):
+            if person_id > -1:
+                region = world.people.get_from_id(person_id).super_area.region.name
+                daily_false_pos_tests[region] += 1
+        for i, person_id in enumerate(self.events["tests"].neg_tests):
+            if person_id > -1:
+                region = world.people.get_from_id(person_id).super_area.region.name
+                daily_neg_tests[region] += 1
+        return daily_true_pos_tests, daily_false_pos_tests, daily_neg_tests
 
     def summarise_time_step(self, timestamp: str, world: "World"):
         daily_infected, current_infected = self.summarise_infections(world=world)
@@ -177,6 +195,7 @@ class Record:
             current_intensive_care,
         ) = self.summarise_hospitalisations(world=world)
         current_susceptible = self.summarise_susceptibles(world=world)
+        daily_true_pos_tests, daily_false_pos_tests, daily_neg_tests = self.summarise_tests(world=world)
         daily_deaths, daily_deaths_in_hospital = self.summarise_deaths(world=world)
         all_hospital_regions = [hospital.region_name for hospital in world.hospitals]
         all_world_regions = [region.name for region in world.regions]
@@ -198,7 +217,11 @@ class Record:
                     current_susceptible.get(region, 0),
                     daily_deaths_in_hospital.get(region, 0),
                     daily_deaths.get(region, 0),
+                    daily_true_pos_tests.get(region, 0),
+                    daily_false_pos_tests.get(region, 0),
+                    daily_neg_tests.get(region, 0),
                 ]
+
                 if sum(data) > 0:
                     summary_writer.writerow(
                         [

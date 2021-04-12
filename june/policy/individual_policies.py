@@ -165,10 +165,13 @@ class Quarantine(StayHome):
             regional_compliance = 1
         self_quarantine = False
         try:
-            if person.symptoms.tag in (SymptomTag.mild, SymptomTag.severe):
-                time_of_symptoms_onset = person.infection.time_of_symptoms_onset
-                release_day = time_of_symptoms_onset + self.n_days
-                if release_day > days_from_start > time_of_symptoms_onset:
+            if person.symptoms.tag in (SymptomTag.mild, SymptomTag.severe) or person.positive_tested:
+                if person.positive_tested:
+                    time_of_quarantine_start = person.time_of_pos_test
+                else:
+                    time_of_quarantine_start = person.infection.time_of_symptoms_onset
+                release_day = time_of_quarantine_start + self.n_days
+                if release_day > days_from_start > time_of_quarantine_start:
                     if random() < self.compliance * regional_compliance:
                         self_quarantine = True
         except AttributeError:

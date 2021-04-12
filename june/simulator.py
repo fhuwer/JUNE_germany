@@ -466,6 +466,12 @@ class Simulator:
             self.activity_manager.policies.regional_compliance.apply(
                 date=self.timer.date, regions=self.world.regions
             )
+            if self.timer.shift == 0:
+                self.activity_manager.policies.testings.apply(
+                    initial_day=self.timer.initial_date,
+                    days_from_start=self.timer.now,record=self.record
+                )
+
         activities = self.timer.activities
         if not activities or len(activities) == 0:
             output_logger.info("==== do_timestep(): no active groups found. ====")

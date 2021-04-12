@@ -40,3 +40,7 @@ from .regional_compliance import (
     TieredLockdown,
     TieredLockdowns
 )
+from .testing import (
+    Testing,
+    Testings
+)

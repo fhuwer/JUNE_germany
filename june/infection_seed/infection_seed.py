@@ -21,7 +21,8 @@ class InfectionSeed:
         infection_selector: InfectionSelector,
         seed_strength: float = 1.0,
         age_profile: Optional[dict] = None,
-        daily_super_area_cases: Optional[pd.DataFrame] = None,
+        path_to_csv: Optional[str] = None,
+        age_bins: Optional[dict] = None,
     ):
         """
         Class that generates the seed for the infection.
@@ -38,16 +39,78 @@ class InfectionSeed:
             dictionary with weight on age groups. Example:
             age_profile = {'0-20': 0., '21-50':1, '51-100':0.}
             would only infect people aged between 21 and 50
+        path_to_csv:
+            string with path to infektion.csv
+        age_bins:
+            dictionary with boolean to infect age groups.
+            Required form: {'00-04':True,'05-14':False,'15-34':True,'35-59':True,'60-79':False,'80-':True}
+            if path_to_csv is given but no age_bins dictionary,
+            all age groups are infected.
+
         """
         self.world = world
         self.infection_selector = infection_selector
         self.seed_strength = seed_strength
         self.age_profile = age_profile
-        self.daily_super_area_cases = daily_super_area_cases
-        if self.daily_super_area_cases is not None:
-            self.min_date = self.daily_super_area_cases.index.min()
-            self.max_date = self.daily_super_area_cases.index.max()
-        self.dates_seeded = []
+        if age_bins is not None:
+            self.age_bins = list(
+                filter(age_bins.get, age_bins)
+            )  # select only True age bins
+        else:
+            self.age_bins = {
+                "00-04": True,
+                "05-14": True,
+                "15-34": True,
+                "35-59": True,
+                "60-79": True,
+                "80-120": True,
+            }
+        self.path_to_csv = path_to_csv
+        if path_to_csv is not None:
+            self.daily_super_area_cases = self.csv_to_daily_super_area_cases()
+            self.min_date = datetime.datetime.strptime(self.daily_super_area_cases.columns.min(),"%Y-%m-%d")
+            self.max_date = datetime.datetime.strptime(self.daily_super_area_cases.columns.max(),"%Y-%m-%d")
+            self.dates_seeded = []
+
+    def csv_to_daily_super_area_cases(self):
+        """
+        reads path_to_csv file and brings it to the form of daily_super_area_cases
+        """
+        df = pd.read_csv(self.path_to_csv)
+        df.drop(columns=["_id", "ags2", "bundesland", "kreis"], inplace=True)
+        df["ags5"] = df["ags5"].astype(str)
+        df["ags5"] = df["ags5"].apply(lambda x: f"D{x:0>5}")
+        df["sex"] = df["variable"].apply(
+            lambda x: x[-7].lower()
+            if x.startswith("kr_inf_") and len(x) == 14
+            else x[-5].lower()
+            if x.startswith("kr_inf_w")
+            and len(x) == 12
+            or x.startswith("kr_inf_m")
+            and len(x) == 12
+            else None
+        )
+
+        df["age_bin"] = df["variable"].apply(
+            lambda x: f"{x[-4:-2]}-{x[-2:]}"
+            if x.startswith("kr_inf_") and len(x) == 14
+            else f"{x[-2:]}-120"
+            if x.startswith("kr_inf_w")
+            and len(x) == 12
+            or x.startswith("kr_inf_m")
+            and len(x) == 12
+            else None
+        )
+        df["age_bin"] = df["age_bin"].apply(lambda x: x if x in self.age_bins else None)
+        df = df[df["age_bin"].notna()]
+        df = (
+            df[df["sex"].notna()]
+            .drop(columns=["variable"])
+            .set_index(["ags5", "sex", "age_bin"])
+        )
+        redate = lambda x: x[1:5] + "-" + x[5:7] + "-" + x[7:9] if x[0] == "d" else x
+        df.rename(mapper=redate, axis="columns", inplace=True)
+        return df
 
     def unleash_virus(
         self,
@@ -62,7 +125,7 @@ class InfectionSeed:
         """
         Infects ```n_cases``` people in ```population```
 
-        Parameters 
+        Parameters
         ----------
         population:
             population to infect
@@ -78,6 +141,7 @@ class InfectionSeed:
         box_mode:
             whether to run on box mode
         """
+
         if mpi_rank == 0:
             susceptible_ids = [
                 person.id for person in population.people if person.susceptible
@@ -85,7 +149,9 @@ class InfectionSeed:
             n_cases = round(self.seed_strength * n_cases)
             if self.age_profile is None:
                 ids_to_infect = np.random.choice(
-                    susceptible_ids, n_cases, replace=False,
+                    susceptible_ids,
+                    n_cases,
+                    replace=False,
                 )
             else:
                 ids_to_infect = self.select_susceptiles_by_age(susceptible_ids, n_cases)
@@ -100,7 +166,7 @@ class InfectionSeed:
                     self.infection_selector.infect_person_at_time(person, 0.0)
                     if record is not None:
                         record.accumulate(
-                            table_name='infections',
+                            table_name="infections",
                             location_spec="infection_seed",
                             region_name=person.super_area.region.name,
                             location_id=0,
@@ -117,7 +183,7 @@ class InfectionSeed:
                 self.infection_selector.infect_person_at_time(person_to_infect, 0.0)
                 if record is not None:
                     record.accumulate(
-                        table_name='infections',
+                        table_name="infections",
                         location_spec="infection_seed",
                         region_name=person_to_infect.super_area.region.name,
                         location_id=0,
@@ -197,27 +263,35 @@ class InfectionSeed:
         """
         for super_area in self.world.super_areas:
             try:
-                n_cases = int(n_cases_per_super_area[super_area.name])
-                self.unleash_virus(
-                    Population(super_area.people), n_cases=n_cases, record=record
-                )
+                for sex in ["m", "w"]:
+                    self.age_profile = n_cases_per_super_area[super_area.name][sex].to_dict()
+                    if sex == "w":
+                        sex = "f"
+                    people = [p for p in super_area.people if p.sex == sex]
+
+                    self.unleash_virus(
+                        Population(people), n_cases=1, record=record
+                    )  # n_cases is 1 since self.age_profile is already in absolute values
+
             except KeyError as e:
                 raise KeyError("There is no data on cases for super area: %s" % str(e))
 
-    def unleash_virus_per_day(self, date: "datetime", record: Optional[Record]=None):
+    def unleash_virus_per_day(self, date: "datetime", record: Optional[Record] = None):
         """
         Infect super areas at a given ```date```
 
         Parameters
         ----------
         date:
-            datetime object 
+            datetime object
         """
         date_str = date.strftime("%Y-%m-%d")
         date = date.date()
         if (
             date not in self.dates_seeded
-            and date_str in self.daily_super_area_cases.index
+            and date_str in self.daily_super_area_cases.columns
         ):
-            self.infect_super_areas(self.daily_super_area_cases.loc[date_str], record=record)
+            self.infect_super_areas(
+                self.daily_super_area_cases.loc[:][date_str], record=record
+            )
             self.dates_seeded.append(date)

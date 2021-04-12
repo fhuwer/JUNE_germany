@@ -78,6 +78,27 @@ class InfectionRecord(EventRecord):
         self.region_names.extend([region_name] * len(infected_ids))
         self.infector_ids.extend(infector_ids)
         self.infected_ids.extend(infected_ids)
+        
+
+class TestingRecord(EventRecord):
+    def __init__(
+        self, hdf5_file,
+    ):
+        super().__init__(
+            hdf5_file=hdf5_file,
+            table_name="tests",
+            int_names=["true_positive_ids","false_positive_ids","neg_tests"],
+            float_names=[],
+            str_names=[],
+        )
+
+    def accumulate(
+        self, region_name, neg_tests, true_positive_ids=-1, false_positive_ids=-1
+    ):
+        self.neg_tests.append(neg_tests)
+        self.true_positive_ids.append(true_positive_ids)
+        self.false_positive_ids.append(false_positive_ids)
+
 
 
 class HospitalAdmissionsRecord(EventRecord):

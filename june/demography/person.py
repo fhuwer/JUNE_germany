@@ -45,6 +45,8 @@ class Person(dataobject):
     # infection
     susceptibility: float = 1.0
     dead: bool = False
+    positive_tested: bool = False
+    time_of_pos_test: float = None
 
     @classmethod
     def from_attributes(

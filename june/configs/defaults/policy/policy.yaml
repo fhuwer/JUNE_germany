@@ -1,3 +1,21 @@
+testing:
+  1:
+    start_time: 2020-03-01
+    end_time: 2020-03-12
+    specificity: 1
+    primary_activity:
+      - company
+      - school
+    frequency:
+      Saturday: False
+      Sunday: False
+      Monday: True
+      Tuesday: True
+      Wednesday: True
+      Thursday: True
+      Friday: True
+
+      
 hospitalisation:
   start_time: 1000-01-01
   end_time: 9999-01-01
@@ -11,6 +29,7 @@ regional_compliance:
     start_time: 1000-07-04
     end_time: 9999-12-01
     compliances_per_region:
+      Rheinland-Pfalz: 1.
       London: 1.15
       South East: 0.99
       South West: 0.99
@@ -26,6 +45,7 @@ tiered_lockdown:
     start_time: 2020-12-03
     end_time: 9999-12-01
     tiers_per_region:
+      Rheinland-Pfalz: 1.
       London: 2.
       South East: 2.
       South West: 2.

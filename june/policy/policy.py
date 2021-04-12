@@ -67,7 +67,8 @@ class Policies:
             MedicalCarePolicies,
             LeisurePolicies,
             RegionalCompliances,
-            TieredLockdowns
+            TieredLockdowns,
+            Testings
         )
 
         self.individual_policies = IndividualPolicies.from_policies(self)
@@ -76,6 +77,7 @@ class Policies:
         self.leisure_policies = LeisurePolicies.from_policies(self)
         self.regional_compliance = RegionalCompliances.from_policies(self)
         self.tiered_lockdown = TieredLockdowns.from_policies(self)
+        self.testings = Testings.from_policies(self)
 
     @classmethod
     def from_file(
@@ -118,10 +120,11 @@ class Policies:
         This function is meant to be used for those policies that need world information to initialise,
         like policies depending on workers' behaviours during lockdown.
         """
-        from june.policy import CloseCompanies, LimitLongCommute
+        from june.policy import CloseCompanies, LimitLongCommute, Testing
 
         CloseCompanies.set_ratios(world=world)
         LimitLongCommute.get_long_commuters(people=world.people)
+        Testing.get_world(world_people=world.people)
 
 
 class PolicyCollection:
