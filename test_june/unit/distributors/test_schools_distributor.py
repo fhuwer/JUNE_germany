@@ -19,7 +19,7 @@ default_mandatory_age_range = (5, 18)
 
 @pytest.fixture(name="geography_school", scope="module")
 def create_geography():
-    geography = Geography.from_file({"super_area": ["E02004935"]})
+    geography = Geography.from_file({"super_area": ["D07315"]})
     return geography
 
 

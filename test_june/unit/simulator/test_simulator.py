@@ -7,7 +7,7 @@ from june.demography import Person, Population
 from june.geography import Geography, Area, SuperArea, Areas, SuperAreas
 from june.world import World
 from june.groups import Hospitals, Schools, Companies, CareHomes, Universities
-from june.groups.leisure import leisure, Cinemas, Pubs, Groceries
+from june.groups.leisure import leisure, Cinemas, Pubs, Groceries, Gyms
 from june.groups.travel import ModeOfTransport, Travel
 from june.infection import InfectionSelector, SymptomTag
 from june.interaction import Interaction
@@ -34,7 +34,7 @@ from june.groups import (
     Universities,
     Cemeteries,
 )
-from june.groups.leisure import leisure, Cinemas, Pubs, Cinema, Pub, Grocery, Groceries
+from june.groups.leisure import leisure, Cinemas, Pubs, Cinema, Pub, Grocery, Groceries, Gym, Gyms
 from june.simulator import Simulator, activity_hierarchy
 from june.world import generate_world_from_geography
 
@@ -71,7 +71,7 @@ def setup_sim(dummy_world, selector):
         person.subgroups.medical_facility = None
         person.dead = False
     leisure_instance = leisure.generate_leisure_for_world(
-        world=world, list_of_leisure_groups=["pubs", "cinemas", "groceries"]
+        world=world, list_of_leisure_groups=["pubs", "cinemas", "groceries", "gyms"]
     )
     leisure_instance.distribute_social_venues_to_areas(
         world.areas, super_areas=world.super_areas
@@ -136,6 +136,7 @@ def test__activities_to_super_groups(sim: Simulator):
         "pubs",
         "cinemas",
         "groceries",
+        "gyms",
         "household_visits",
         "care_home_visits",
         "households",
@@ -178,6 +179,7 @@ def test__move_people_to_leisure(sim: Simulator):
     n_cinemas = 0
     n_pubs = 0
     n_groceries = 0
+    n_gyms = 0
     repetitions = 500
     for _ in range(repetitions):
         sim.clear_world()
@@ -193,6 +195,8 @@ def test__move_people_to_leisure(sim: Simulator):
                     n_pubs += 1
                 elif person.leisure.group.spec == "grocery":
                     n_groceries += 1
+                elif person.leisure.group.spec == "gym":
+                    n_gyms += 1
                 if person not in person.residence.people:
                     assert person in person.leisure.people
     assert n_leisure > 0

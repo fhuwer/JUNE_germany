@@ -131,7 +131,7 @@ def create_interaction(health_index_generator):
 @pytest.fixture(name="geography", scope="session")
 def make_geography():
     geography = Geography.from_file(
-        {"super_area": ["E02002512", "E02001697", "E02001731"]}
+        {"super_area": ["D07339", "D07315", "D07331"]}
     )
     return geography
 
@@ -150,7 +150,7 @@ def create_world(geography):
 
 @pytest.fixture(name="world_box", scope="session")
 def create_box_world():
-    geography = Geography.from_file({"area": ["E00000697"]})
+    geography = Geography.from_file({"area": ["D073395008050"]})
     return generate_world_from_geography(geography, box_mode=True)
 
 
@@ -175,7 +175,7 @@ def create_simulator_box(world_box, interaction, selector):
 
 @pytest.fixture(name="world_visits", scope="session")
 def make_super_areas():
-    geo = Geography.from_file({"super_area": ["E02003353"]})
+    geo = Geography.from_file({"super_area": ["D07339"]})
     geo.care_homes = CareHomes.for_geography(geo)
     world = generate_world_from_geography(geo, include_households=True)
     return world
@@ -184,7 +184,7 @@ def make_super_areas():
 # policy dummy world
 @pytest.fixture(name="dummy_world", scope="session")
 def make_dummy_world():
-    g = Geography.from_file(filter_key={"super_area": ["E02002559"]})
+    g = Geography.from_file(filter_key={"super_area": ["D07315"]})
     super_area = g.super_areas.members[0]
     area = g.areas.members[0]
     company = Company(super_area=super_area, n_workers_max=100, sector="S")
@@ -245,6 +245,10 @@ def make_dummy_world():
     cinema.coordinates = super_area.coordinates
     cinema.area = area
     world.cinemas = Cinemas([cinema])
+    gym = Gym(area=area)
+    gym.coordinates = super_area.coordinates
+    gym.area = area
+    world.gyms = Gyms([gym])
     pub = Pub(area=area)
     pub.coordinates = super_area.coordinates
     pub.area = area
@@ -311,7 +315,7 @@ def setup_world(dummy_world, policy_simulator):
 
 @pytest.fixture(name="full_world_geography", scope="session")
 def make_full_world_geography():
-    geography = Geography.from_file({"super_area": ["E02001731", "E02002566"]})
+    geography = Geography.from_file({"super_area": ["D07339", "D07141"]})
     return geography
 
 
@@ -329,9 +333,10 @@ def create_full_world(full_world_geography, test_results):
     world = generate_world_from_geography(geography=geography, include_households=True)
     world.pubs = Pubs.for_geography(geography)
     world.cinemas = Cinemas.for_geography(geography)
+    world.gyms = Gyms.for_geography(geography)
     world.groceries = Groceries.for_geography(geography)
     leisure = generate_leisure_for_world(
-        ["pubs", "cinemas", "groceries", "household_visits", "care_home_visits"], world
+        ["pubs", "cinemas", "gyms", "groceries", "household_visits", "care_home_visits"], world
     )
     leisure.distribute_social_venues_to_areas(
         areas=world.areas, super_areas=world.super_areas
@@ -344,7 +349,7 @@ def create_full_world(full_world_geography, test_results):
 @pytest.fixture(name="domains_world", scope="session")
 def create_domains_world():
     geography = Geography.from_file(
-        {"super_area": ["E02001731", "E02001732", "E02002566", "E02002567"]}
+        {"super_area": ["D07339", "D07315", "D07331", "D07141"]}
     )
     geography.hospitals = Hospitals.for_geography(geography)
     geography.schools = Schools.for_geography(geography)
@@ -354,9 +359,10 @@ def create_domains_world():
     world = generate_world_from_geography(geography=geography, include_households=True)
     world.pubs = Pubs.for_geography(geography)
     world.cinemas = Cinemas.for_geography(geography)
+    world.gyms = Gyms.for_geography(geography)
     world.groceries = Groceries.for_geography(geography)
     leisure = generate_leisure_for_world(
-        ["pubs", "cinemas", "groceries", "household_visits", "care_home_visits"], world
+        ["pubs", "cinemas", "gyms", "groceries", "household_visits", "care_home_visits"], world
     )
     leisure.distribute_social_venues_to_areas(
         areas=world.areas, super_areas=world.super_areas

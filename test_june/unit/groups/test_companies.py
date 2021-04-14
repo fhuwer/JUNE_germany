@@ -16,7 +16,7 @@ default_data_path = Path(os.path.abspath(__file__)).parent.parent.parent.parent 
 
 @pytest.fixture(name="super_area_companies", scope="module")
 def create_geography():
-    g = Geography.from_file(filter_key={"super_area" : ["E02002559"]})
+    g = Geography.from_file(filter_key={"super_area" : ["D07315"]})
     return g.super_areas.members[0]
 
 @pytest.fixture(name="person")
@@ -56,7 +56,7 @@ def create_companies(super_area_companies):
     return companies
 
 def test__company_sizes(companies_example):
-    assert len(companies_example) == 610
+    assert len(companies_example) == 8339
     sizes_dict = defaultdict(int)
     bins = [0, 10, 20, 50, 100, 250, 500, 1000, 1500]
     for company in companies_example:

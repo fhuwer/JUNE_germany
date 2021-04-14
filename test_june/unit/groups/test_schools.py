@@ -9,7 +9,7 @@ from june.groups import School, Schools
 
 @pytest.fixture(name="geo_schools", scope="module")
 def area_name():
-    geography = Geography.from_file(filter_key={"super_area": ["E02004935"]})
+    geography = Geography.from_file(filter_key={"super_area": ["D07315"]})
     return geography
 
 
@@ -52,7 +52,7 @@ class TestSchools:
         return Schools.for_geography(geo_schools)
 
     def test__school_nr_for_geography(self, schools):
-        assert len(schools) == 4
+        assert len(schools) == 46
 
     def test__school_is_closest_to_itself(self, schools):
         school = schools.members[0]

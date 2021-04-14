@@ -131,7 +131,7 @@ def test__average_time_to_infect(n_teachers, mode, selector):
 
 
 def test__infection_is_isolated(selector):
-    geography = Geography.from_file({"area": ["E00002559"]})
+    geography = Geography.from_file({"area": ["D073395008050"]})
     world = generate_world_from_geography(geography, include_households=True)
     interaction = Interaction.from_file(config_filename=test_config)
     infection_seed = InfectionSeed(world, selector)

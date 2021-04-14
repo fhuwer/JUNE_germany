@@ -9,7 +9,7 @@ from june.geography import geography as g
 
 @pytest.fixture()
 def geography_example():
-    return g.Geography.from_file(filter_key={"super_area": ["E02000140"]})
+    return g.Geography.from_file(filter_key={"super_area": ["D07339"]})
 
 
 def test__create_geographical_hierarchy():
@@ -62,43 +62,43 @@ def test__create_geographical_hierarchy():
 
 
 def test__nr_of_members_in_units(geography_example):
-    assert len(geography_example.areas) == 26
+    assert len(geography_example.areas) == 66
     assert len(geography_example.super_areas) == 1
 
 
 def test__area_attributes(geography_example):
-    area = geography_example.areas.get_from_name("E00003598")
-    assert area.name == "E00003598"
+    area = geography_example.areas.get_from_name("D073390005005")
+    assert area.name == "D073390005005"
     npt.assert_almost_equal(
-        area.coordinates, [51.395954503652504, 0.10846483370388499], decimal=3,
+        area.coordinates, [49.947799484915365, 7.9360448700887485], decimal=3,
     )
-    assert area.super_area.name == "E02000140"
+    assert area.super_area.name == "D07339"
 
 
 def test__super_area_attributes(geography_example):
-    super_area = geography_example.super_areas.get_from_name("E02000140")
-    assert super_area.name == "E02000140"
+    super_area = geography_example.super_areas.get_from_name("D07339")
+    assert super_area.name == "D07339"
     npt.assert_almost_equal(
-        super_area.coordinates, [51.40340615262757, 0.10741193961090514], decimal=3,
+        super_area.coordinates, [49.92201623715109, 8.079637166959145], decimal=3,
     )
-    assert "E00003595" in [area.name for area in super_area.areas]
+    assert "D073390005005" in [area.name for area in super_area.areas]
 
 
 def test__create_single_area():
-    geography = g.Geography.from_file(filter_key={"area": ["E00120481"]})
+    geography = g.Geography.from_file(filter_key={"area": ["D073390005005"]})
     assert len(geography.areas) == 1
 
 
 def test_create_ball_tree_for_super_areas():
-    geo = g.Geography.from_file(filter_key={"super_area": ["E02004935", "E02000140"]})
+    geo = g.Geography.from_file(filter_key={"super_area": ["D07315", "D07339"]})
     super_area = geo.super_areas.get_closest_super_areas(
-        coordinates=[54.770512, -1.594221]
+        coordinates=[49.974186337513885, 8.241497125821837]
     )[0]
-    assert super_area.name == "E02004935"
+    assert super_area.name == "D07315"
     assert (
         len(
             geo.super_areas.get_closest_super_areas(
-                coordinates=[54.770512, -1.594221], k=2
+                coordinates=[49.974186337513885, 8.241497125821837], k=2
             )
         )
         == 2
@@ -106,7 +106,7 @@ def test_create_ball_tree_for_super_areas():
     assert (
         len(
             geo.areas.get_closest_areas(
-                coordinates=[54.770512, -1.594221], k=10
+                coordinates=[49.974186337513885, 8.241497125821837], k=10
             )
         )
         == 10

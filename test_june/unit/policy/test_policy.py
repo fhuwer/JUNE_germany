@@ -64,7 +64,7 @@ def create_interaction():
 
 @pytest.fixture(name="super_area", scope="module")
 def create_geography():
-    g = Geography.from_file(filter_key={"super_area": ["E02002559"]})
+    g = Geography.from_file(filter_key={"super_area": ["D07315"]})
     return g.super_areas.members[0]
 
 class TestPolicy:

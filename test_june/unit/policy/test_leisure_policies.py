@@ -16,7 +16,7 @@ from june.groups import (
     Universities,
     Cemeteries,
 )
-from june.groups.leisure import Cinemas, Pubs, Cinema, Pub, generate_leisure_for_config
+from june.groups.leisure import Cinemas, Pubs, Cinema, Pub, Gyms, Gym, generate_leisure_for_config
 from june.infection import SymptomTag
 from june.infection.infection_selector import InfectionSelector
 from june.interaction import Interaction
@@ -67,7 +67,7 @@ class TestCloseLeisure:
             activities, time_during_policy, 0.0
         )
         assert (
-            worker in worker.leisure.people and worker.leisure.group.spec == "cinema"
+            worker in worker.leisure.people and (worker.leisure.group.spec == "cinema" or worker.leisure.group.spec == "gym")
         ) or worker in worker.residence.people
         sim.clear_world()
 
@@ -86,7 +86,7 @@ class TestCloseLeisure:
         tiered_lockdown = TieredLockdown(
             start_time="2020-03-01",
             end_time="2020-03-30",
-            tiers_per_region={"North East": 3.},
+            tiers_per_region={"Rheinland-Pfalz": 3.},
         )
         tiered_lockdowns = TieredLockdowns([tiered_lockdown])
         
@@ -111,6 +111,7 @@ class TestCloseLeisure:
         policies.tiered_lockdown.apply(date=time_during_policy, regions=world.regions)
         assert "pub" in list(world.regions[0].policy["local_closed_venues"])
         assert "cinema" in list(world.regions[0].policy["local_closed_venues"])
+        assert "gym" in list(world.regions[0].policy["local_closed_venues"])
         leisure.generate_leisure_probabilities_for_timestep(10000, False, False)
         sim.activity_manager.move_people_to_active_subgroups(
             activities, time_during_policy, 0.0
@@ -128,7 +129,7 @@ class TestCloseLeisure:
         )
         assert worker in worker.leisure.people
 
-    
+ 
 
 
 class TestReduceLeisureProbabilities:

@@ -25,7 +25,7 @@ def load_config():
 
 @pytest.fixture(name="worker_super_areas", scope="module")
 def use_super_areas():
-    return ["E02002559", "E02002560", "E02002561", "E02002665"]  # E00064524
+    return ["D07315", "D07331", "D07339", "D07141"]
 
 
 @pytest.fixture(name="worker_geography", scope="module")

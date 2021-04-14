@@ -11,9 +11,12 @@ from june.groups.leisure import (
     Pubs,
     Cinemas,
     Cinema,
+    Gyms,
+    Gym,
     Groceries,
     PubDistributor,
     CinemaDistributor,
+    GymDistributor,
 )
 from june.geography import Geography
 from june.demography import Person, Demography
@@ -27,7 +30,7 @@ class MockArea:
 
 @fixture(name="geography")
 def make_geography():
-    geography = Geography.from_file({"super_area": ["E02000140"]})
+    geography = Geography.from_file({"super_area": ["D07339"]})
     return geography
 
 
@@ -47,8 +50,16 @@ def make_leisure():
         poisson_parameters={"male": {"10-40": 0.2}, "female": {"10-40": 0.2}},
         drags_household_probability=1.0,
     )
+    gyms = Gyms([Gym()], make_tree=False)
+    gyms[0].coordinates = [1, 2]
+    gym_distributor = GymDistributor(
+        gyms,
+        poisson_parameters={"male": {"15-40": 0.3}, "female": {"15-40": 0.3}},
+        drags_household_probability=0.5,
+    )
+
     leisure = Leisure(
-        leisure_distributors={"pubs": pub_distributor, "cinemas": cinema_distributor}
+            leisure_distributors={"pubs": pub_distributor, "cinemas": cinema_distributor, "gyms": gym_distributor}
     )
     leisure.generate_leisure_probabilities_for_timestep(0.01, False, False)
     return leisure
@@ -62,12 +73,14 @@ def test__probability_of_leisure(leisure):
     person.area.social_venues = {
         "cinemas": [leisure.leisure_distributors["cinemas"].social_venues[0]],
         "pubs": [leisure.leisure_distributors["pubs"].social_venues[0]],
+        "gyms": [leisure.leisure_distributors["gyms"].social_venues[0]],
     }
 
     estimated_time_for_activity = 1 / (0.5 + 0.2)
     times = []
     times_goes_pub = 0
     times_goes_cinema = 0
+    times_goes_gym = 0
     for _ in range(0, 300):
         counter = 0
         while True:
@@ -79,6 +92,8 @@ def test__probability_of_leisure(leisure):
                 times_goes_pub += 1
             elif subgroup.group.spec == "cinema":
                 times_goes_cinema += 1
+            elif subgroup.group.spec == "gym":
+                times_goes_gym += 1
             else:
                 raise ValueError
             times.append(counter)
@@ -107,18 +122,19 @@ def test__person_drags_household(leisure):
 
 
 def test__generate_leisure_from_world():
-    geography = Geography.from_file({"super_area": ["E02002135"]})
+    geography = Geography.from_file({"super_area": ["D07339"]})
     world = generate_world_from_geography(geography, include_households=True)
     world.pubs = Pubs.for_geography(geography)
     world.cinemas = Cinemas.for_geography(geography)
     world.groceries = Groceries.for_geography(geography)
+    world.gyms = Gyms.for_geography(geography)
     person = Person.from_attributes(sex="m", age=27)
     household = Household()
     household.area = world.areas[0]
     household.add(person)
     person.area = geography.areas[0]
     leisure = generate_leisure_for_world(
-        list_of_leisure_groups=["pubs", "cinemas", "groceries"], world=world
+        list_of_leisure_groups=["pubs", "cinemas", "groceries", "gyms"], world=world
     )
     leisure.distribute_social_venues_to_areas(
         world.areas, super_areas=world.super_areas
@@ -127,6 +143,7 @@ def test__generate_leisure_from_world():
     n_pubs = 0
     n_cinemas = 0
     n_groceries = 0
+    n_gyms = 0
     for _ in range(0, 1000):
         subgroup = leisure.get_subgroup_for_person_and_housemates(person)
         if subgroup is not None:
@@ -136,6 +153,9 @@ def test__generate_leisure_from_world():
                 n_cinemas += 1
             elif subgroup.group.spec == "grocery":
                 n_groceries += 1
+            elif subgroup.group.spec == "gym":
+                n_gyms += 1
     assert 0 < n_pubs < 100
     assert 0 < n_cinemas < 100
+    assert 0 < n_gyms < 100 
     assert 0 < n_groceries < 107

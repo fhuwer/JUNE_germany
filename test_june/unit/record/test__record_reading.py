@@ -98,7 +98,7 @@ def create_interaction():
 
 @pytest.fixture(name="geog", scope="module")
 def create_geography():
-    geog = Geography.from_file(filter_key={"area": ["E00000001"]})
+    geog = Geography.from_file(filter_key={"area": ["D073150000000"]})
     return geog
 
 

@@ -14,7 +14,7 @@ def area_name():
 
 @pytest.fixture(name="geography_demography_test", scope="module")
 def create_geography():
-    return Geography.from_file(filter_key={"super_area": ["E02004935"]})
+    return Geography.from_file(filter_key={"super_area": ["D07315"]})
 
 
 def test__age_sex_generator():
@@ -84,12 +84,12 @@ def test__age_sex_generator():
 
 class TestDemography:
     def test__demography_for_areas(self):
-        geography = Geography.from_file({"area": ["E00088544"]})
+        geography = Geography.from_file({"area": ["D073150000000"]})
         area = list(geography.areas)[0]
         demography = d.Demography.for_areas(area_names=[area.name])
         area.populate(demography)
         population = area.people
-        assert len(population) == 362
+        assert len(population) == 200344
         people_ages_dict = {}
         people_sex_dict = {}
         for person in population:
@@ -116,12 +116,12 @@ class TestDemography:
         assert max(people_ages_dict.keys()) == 90
 
     def test__demography_for_super_areas(self):
-        demography = d.Demography.for_zone(filter_key={"super_area": ["E02004935"]})
-        assert len(demography.age_sex_generators) == 26
+        demography = d.Demography.for_zone(filter_key={"super_area": ["D07339"]})
+        assert len(demography.age_sex_generators) == 66
 
     def test__demography_for_geography(self, geography_demography_test):
         demography = d.Demography.for_geography(geography_demography_test)
-        assert len(demography.age_sex_generators) == 26
+        assert len(demography.age_sex_generators) == 1
 
     def test__age_sex_generator_from_bins(self):
         men_age_dict = {"0-10": 1000, "11-70": 2000, "71-99": 500}
@@ -149,7 +149,7 @@ class TestDemography:
         )
 
     def test__comorbidities_for_areas(self):
-        geography = Geography.from_file({"area": ["E00088544"]})
+        geography = Geography.from_file({"area": ["D073150000000"]})
         area = list(geography.areas)[0]
         demography = d.Demography.for_areas(area_names=[area.name])
         area.populate(demography)
@@ -166,4 +166,4 @@ class TestPopulation:
         for area in geography_demography_test.areas:
             area.populate(demography)
             population.extend(area.people)
-        assert len(population) == 7602
+        assert len(population) == 200344

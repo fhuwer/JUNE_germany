@@ -27,7 +27,7 @@ def make_medic_old():
 
 @pytest.fixture(name="geography_hospital")
 def make_geography(young_medic, old_medic):
-    geography = Geography.from_file({"super_area": ["E02003999", "E02006764"]})
+    geography = Geography.from_file({"super_area": ["D07315", "D07339"]})
     for _ in range(200):
         geography.super_areas.members[0].add_worker(young_medic)
         geography.super_areas.members[0].areas[0].add(young_medic)
