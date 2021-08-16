@@ -45,8 +45,8 @@ class Person(dataobject):
     # infection
     susceptibility: float = 1.0
     dead: bool = False
-    positive_tested: bool = False
-    time_of_pos_test: float = None
+    test_result: bool = None
+    days_from_start_of_test: float = None
 
     @classmethod
     def from_attributes(
@@ -192,3 +192,15 @@ class Person(dataobject):
         if (not self.dead) and (self.medical_facility is None) and (not self.busy):
             return True
         return False
+
+    def up_to_date_test_result(self, days_from_start):
+        if not self.test_result:
+            # In case the test was negative, the test is invalid after one day
+            if days_from_start >= self.days_from_start_of_test + 1:
+                self.test_result = None
+        elif self.test_result:
+            # In case the test was positive, the test stays valid for 14 days (to force a
+            # quarantine of 14 days)
+            if days_from_start >= self.days_from_start_of_test + 14:
+                self.test_result = None
+        return self.test_result

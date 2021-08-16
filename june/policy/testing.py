@@ -2,30 +2,32 @@ import logging
 from datetime import datetime, timedelta
 from .policy import Policy, PolicyCollection
 from numpy.random import rand
-from typing import Optional
-
+from typing import List, Optional
+from random import random
 
 logger = logging.getLogger(__name__)
+
 
 
 class Testing(Policy):
     population = None
 
-    policy_type = "testing"
-
-    def __init__(
-        self,
-        start_time,
-        end_time,
-        primary_activity=None,
-        frequency: dict = None,
-        specificity: float = None,
-    ):
+    policy_type = 'testing'
+    
+    def __init__(self,
+                start_time,
+                end_time,
+                primary_activity=None,
+                frequency: dict=None,
+                specificity: float=None,
+                compliance: float=1.,
+        ):
         self.frequency = frequency
         self.start_time = start_time
         self.end_time = end_time
         self.specificity = specificity
         self.primary_activity = primary_activity
+        self.compliance = compliance
 
     @classmethod
     def get_world(self, world_people):
@@ -35,7 +37,7 @@ class Testing(Policy):
         test_people = []
         if self.primary_activity is not None:
             for p in self.population:
-                if not p.positive_tested:
+                if not p.test_result:
                     if p.subgroups.primary_activity is not None:
                         if (
                             p.subgroups.primary_activity.group.spec
@@ -44,7 +46,7 @@ class Testing(Policy):
                             test_people.append(p)
         else:
             for p in self.population:
-                if not p.positive_tested:
+                if not p.test_result:
                     test_people.append(p)
         return test_people
 
@@ -60,34 +62,34 @@ class Testings(PolicyCollection):
 
             if policy.is_active(datetime.date(current_day)):
                 if policy.frequency.get(weekday, False):
-                    logger.info(f">> Testing {', '.join(policy.primary_activity)} on {weekday}")
-                    count = 0
                     for p in people_to_test:
-                        true_pos, false_pos, neg_test = -1, -1, -1
-                        if p.infected:
-                            if rand() < self.sensitivity(p):
-                                p.positive_tested = True
-                                p.time_of_pos_test = days_from_start
-                                true_pos = p.id
-                                count += 1
-                        else:
-                            if rand() > policy.specificity:
-                                p.positive_tested = True
-                                p.time_of_pos_test = days_from_start
-                                false_pos = p.id
-                                count += 1
-                            else:
-                                neg_test = p.id
-                        if record is not None:
-                            record.accumulate(
-                                table_name="tests",
-                                neg_tests=neg_test,
-                                region_name=p.super_area.region.name,
-                                false_positive_ids=false_pos,
-                                true_positive_ids=true_pos,
-                            )
+                        true_pos, false_pos, true_neg, false_neg = -1, -1, -1, -1
+                        if random() < policy.compliance:
+                            p.days_from_start_of_test = days_from_start
+                            if p.infected:
+                                if rand() < self.sensitivity(p):
+                                    p.test_result = True
+                                    true_pos = p.id
+                                else:
+                                    p.test_result = False
+                                    false_neg = p.id
 
-                    logger.info(f"From {len(people_to_test)} people {count} tested positive.")
+                            else:
+                                if rand() > policy.specificity:
+                                    p.test_result = True
+                                    false_pos = p.id
+                                else:
+                                    p.test_result = False
+                                    true_neg = p.id
+                            if record is not None:
+                                record.accumulate(
+                                    table_name="tests",
+                                    region_name=p.super_area.region.name,
+                                    false_positive_ids=false_pos,
+                                    true_positive_ids=true_pos,
+                                    false_negative_ids=false_neg,
+                                    true_negative_ids=true_neg,
+                                )
 
     def sensitivity(self, person):
         tag = str(person.symptoms.tag).split(".")[1]

@@ -87,15 +87,17 @@ class TestingRecord(EventRecord):
         super().__init__(
             hdf5_file=hdf5_file,
             table_name="tests",
-            int_names=["true_positive_ids","false_positive_ids","neg_tests"],
+            int_names=["true_positive_ids","false_positive_ids","true_negative_ids","false_negative_ids"],
             float_names=[],
             str_names=[],
         )
 
     def accumulate(
-        self, region_name, neg_tests, true_positive_ids=-1, false_positive_ids=-1
+        self, region_name, true_positive_ids=-1, false_positive_ids=-1,
+            true_negative_ids=-1, false_negative_ids=-1
     ):
-        self.neg_tests.append(neg_tests)
+        self.true_negative_ids.append(true_negative_ids)
+        self.false_negative_ids.append(false_negative_ids)
         self.true_positive_ids.append(true_positive_ids)
         self.false_positive_ids.append(false_positive_ids)
 

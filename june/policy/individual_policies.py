@@ -132,6 +132,7 @@ class Quarantine(StayHome):
         n_days_household: int = 14,
         compliance: float = 1.0,
         household_compliance: float = 1.0,
+        testing_compliance: float =1.0,
     ):
         """
         This policy forces people to stay at home for ```n_days``` days after they show symtpoms, and for ```n_days_household``` if someone else in their household shows symptoms
@@ -157,6 +158,7 @@ class Quarantine(StayHome):
         self.compliance = compliance
         self.household_compliance = household_compliance
         self.compliance = compliance
+        self.testing_compliance = testing_compliance
 
     def check_stay_home_condition(self, person: Person, days_from_start):
         try:
@@ -165,14 +167,16 @@ class Quarantine(StayHome):
             regional_compliance = 1
         self_quarantine = False
         try:
-            if person.symptoms.tag in (SymptomTag.mild, SymptomTag.severe) or person.positive_tested:
-                if person.positive_tested:
-                    time_of_quarantine_start = person.time_of_pos_test
+            if person.symptoms.tag in (SymptomTag.mild, SymptomTag.severe) or person.up_to_date_test_result(days_from_start=days_from_start):
+                if person.test_result:
+                    time_of_quarantine_start = person.days_from_start_of_test
+                    compliance =  self.testing_compliance
                 else:
                     time_of_quarantine_start = person.infection.time_of_symptoms_onset
+                    compliance = self.compliance
                 release_day = time_of_quarantine_start + self.n_days
                 if release_day > days_from_start > time_of_quarantine_start:
-                    if random() < self.compliance * regional_compliance:
+                    if random() < compliance * regional_compliance:
                         self_quarantine = True
         except AttributeError:
             pass
