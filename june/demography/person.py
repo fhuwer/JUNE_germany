@@ -194,6 +194,8 @@ class Person(dataobject):
         return False
 
     def up_to_date_test_result(self, days_from_start):
+        if self.test_result is None:
+            return self.test_result
         if not self.test_result:
             # In case the test was negative, the test is invalid after one day
             if days_from_start >= self.days_from_start_of_test + 1:
