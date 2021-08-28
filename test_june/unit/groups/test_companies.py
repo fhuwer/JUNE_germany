@@ -56,18 +56,17 @@ def create_companies(super_area_companies):
     return companies
 
 def test__company_sizes(companies_example):
-    assert len(companies_example) == 8339
+    assert len(companies_example) == 8328
     sizes_dict = defaultdict(int)
-    bins = [0, 10, 20, 50, 100, 250, 500, 1000, 1500]
+    bins = [0, 10, 50, 250, 1500]
     for company in companies_example:
         size = company.n_workers_max
         idx = np.searchsorted(bins, size) - 1
         sizes_dict[idx] += 1
-    assert np.isclose(sizes_dict[0], 505, atol=10)
-    assert np.isclose(sizes_dict[1], 40, atol=10)
-    assert np.isclose(sizes_dict[2], 40, atol=10)
-    assert np.isclose(sizes_dict[3], 10, atol=5)
-    assert np.isclose(sizes_dict[4], 10, atol=6)
+    assert np.isclose(sizes_dict[0], 7459, atol=20)
+    assert np.isclose(sizes_dict[1], 699, atol=20)
+    assert np.isclose(sizes_dict[2], 141, atol=10)
+    assert np.isclose(sizes_dict[3], 29, atol=10)
 
 def test__company_ids(companies_example, super_area_companies):
     for company_id, company in companies_example.members_by_id.items():
