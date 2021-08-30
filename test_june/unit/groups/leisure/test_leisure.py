@@ -76,7 +76,7 @@ def test__probability_of_leisure(leisure):
         "gyms": [leisure.leisure_distributors["gyms"].social_venues[0]],
     }
 
-    estimated_time_for_activity = 1 / (0.5 + 0.2)
+    estimated_time_for_activity = 1 / (0.5 + 0.2 + 0.3)
     times = []
     times_goes_pub = 0
     times_goes_cinema = 0
