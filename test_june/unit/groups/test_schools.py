@@ -52,7 +52,7 @@ class TestSchools:
         return Schools.for_geography(geo_schools)
 
     def test__school_nr_for_geography(self, schools):
-        assert len(schools) == 46
+        assert len(schools) == 139
 
     def test__school_is_closest_to_itself(self, schools):
         school = schools.members[0]
