@@ -93,16 +93,8 @@ class TestDemography:
         people_ages_dict = {}
         people_sex_dict = {}
         for person in population:
-            if person.age == 0:
-                assert person.sex == "f"
-            if person.age > 90:
-                assert person.sex == "f"
-            if person.age == 21:
-                assert person.sex == "m"
-            if person.age in range(55, 69):
-                assert person.ethnicity.startswith("A")
             assert person.ethnicity.startswith("D") is False
-            assert person.socioecon_index == 6
+            assert person.socioecon_index == 1
             if person.age not in people_ages_dict:
                 people_ages_dict[person.age] = 1
             else:
@@ -111,9 +103,10 @@ class TestDemography:
                 people_sex_dict[person.sex] = 1
             else:
                 people_sex_dict[person.sex] += 1
-        assert people_ages_dict[0] == 6
-        assert people_ages_dict[71] == 3
-        assert max(people_ages_dict.keys()) == 90
+
+        assert people_ages_dict[0] == 1835
+        assert people_ages_dict[99] == 71
+        assert max(people_ages_dict.keys()) == 99
 
     def test__demography_for_super_areas(self):
         demography = d.Demography.for_zone(filter_key={"super_area": ["D07339"]})
