@@ -13,7 +13,7 @@ def test__onearea_world(geography):
     assert len(world.super_areas) == 1
     assert world.super_areas.members[0].name == "D07339"
     assert len(world.areas.members[0].people) == 822
-    assert len(world.households) <= 294
+    assert len(world.households) <= 312
 
 
 def test__world_has_everything(world):
