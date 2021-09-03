@@ -25,3 +25,7 @@ dist/
 *.prof
 *.svg
 test_results
+pre_checkpoint_results/
+post_checkpoint_results/
+results/
+june/test.py
