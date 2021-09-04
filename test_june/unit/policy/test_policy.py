@@ -18,7 +18,7 @@ from june.groups import (
     Universities,
     Cemeteries,
 )
-from june.groups.leisure import leisure, Cinemas, Pubs, Cinema, Pub
+from june.groups.leisure import leisure, Cinemas, Pubs, Cinema, Pub, Gyms, Gym
 from june.infection import SymptomTag
 from june.infection.infection_selector import InfectionSelector
 from june.policy import (
