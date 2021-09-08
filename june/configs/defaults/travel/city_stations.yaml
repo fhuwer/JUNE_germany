@@ -1,15 +1,20 @@
 number_of_inter_city_stations: # each city also acts like an station for internal commuters.
-  "Birmingham": 4
-  "Bristol": 4
-  "Brighton and Hove": 4
-  "Cambridge": 4
-  "Cardiff": 4
-  "Leeds": 4
-  "Leicester": 4
-  "Liverpool": 4
-  "London": 8
-  "Manchester": 4
-  "Newcastle upon Tyne": 4
-  "Nottingham": 4
-  "Reading": 4
-  "Sheffield": 4
+  "Frankfurt (Main)": 4
+  "Köln": 4
+  "Berlin": 4
+  "Hamburg": 4
+  "München": 4
+  "Stuttgart": 4
+  "Düsseldorf": 4
+  "Duisburg": 4
+  "Dortmund": 4
+  "Mannheim": 4
+  "Hannover": 4
+  "Nürnberg": 4
+  "Essen": 4
+  "Bremen": 4
+  "Leipzig": 4
+
+  # data from https://de.wikipedia.org/wiki/Bahnhof#Meistfrequentierte_Fernbahnh%C3%B6fe_in_Deutschland 01.09.2021
+
+
