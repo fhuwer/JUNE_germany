@@ -9,13 +9,16 @@ from june.infection_seed import InfectionSeed
 from pathlib import Path
 from june.time import Timer
 
+from june import paths
+
 path_pwd = Path(__file__)
 dir_pwd = path_pwd.parent
 constant_config = (
-    dir_pwd.parent.parent.parent
-    / "configs/defaults/transmission/TransmissionConstant.yaml"
+        dir_pwd.parent.parent.parent
+        / "configs/defaults/transmission/TransmissionConstant.yaml"
 )
 
+infpath = paths.data_path / "infection_seed/infektionen.csv"
 
 @pytest.fixture(name="world", scope="module")
 def create_world():
@@ -43,122 +46,147 @@ def clean_world(world):
 
 
 def test__simplest_seed(world, selector):
-    seed = InfectionSeed(world=world, infection_selector=selector,)
+    seed = InfectionSeed(
+        world=world,
+        infection_selector=selector,
+        path_to_csv=infpath,
+    )
     n_cases = 10
     seed.unleash_virus(Population(world.people), n_cases=n_cases)
     infected_people = len([person for person in world.people if person.infected])
     assert infected_people == n_cases
 
+
 def test__seed_strength(world, selector):
     clean_world(world)
     n_cases = 10
-    seed = InfectionSeed(world=world, infection_selector=selector, seed_strength=0.2,)
+    seed = InfectionSeed(
+        world=world,
+        infection_selector=selector,
+        seed_strength=0.2,
+        path_to_csv=infpath,
+    )
     seed.unleash_virus(Population(world.people), n_cases=n_cases)
     infected_people = len([person for person in world.people if person.infected])
     np.testing.assert_allclose(0.2 * n_cases, infected_people, rtol=0.01)
 
+
 def test__infection_by_super_area(world, selector):
     clean_world(world)
     seed = InfectionSeed(
-        world=world, infection_selector=selector, 
+        world=world,
+        infection_selector=selector,
+        path_to_csv=infpath,
     )
-    n_daily_cases_by_super_area = pd.DataFrame(
-            {
-            'super_1': [10],
-            'super_2': [20]
-            }
-            )
+    n_cases_by_super_area = pd.DataFrame(
+        {
+            "sex": ['m', 'm', 'w', 'w'],
+            "age_bin": ["0-4", "5-14", "0-4", "5-14"],
+            "super_1": [2, 3, 8, 2],
+            "super_2": [4, 1, 1, 1]
+        }
+    ).set_index(['sex', 'age_bin'])
 
-    seed.infect_super_areas(n_daily_cases_by_super_area)
+    seed.infect_super_areas(n_cases_by_super_area)
+
     infected_super_1 = len([person for person in world.super_areas[0].people if person.infected])
-    assert infected_super_1 == 10
     infected_super_2 = len([person for person in world.super_areas[1].people if person.infected])
-    assert infected_super_2 == 20
- 
+    for p in world.people.infected:
+        assert p.age < 15
+
+    assert infected_super_1 <= 8 + 2  # as only women are generated in dummy world
+    assert infected_super_2 <= 1 + 1
+
+
 def test__infection_by_super_area_errors(world, selector):
     clean_world(world)
     seed = InfectionSeed(
-        world=world, infection_selector=selector, 
+        world=world,
+        infection_selector=selector,
+        path_to_csv=infpath,
     )
+
     n_daily_cases_by_super_area = pd.DataFrame(
-            {
-            'date': ['2020-04-10'],
-            'super_1': [10],
-            'super_6': [20]
-            }
-            )
+        {
+            "sex": ['m', 'm', 'w', 'w'],
+            "age_bin": ["0-4", "5-14", "0-4", "5-14"],
+            "date": ["2020-04-20", "2020-04-20", "2020-04-20", "2020-04-20"],
+            "super_3": [2, 3, 8, 2],
+            "super_2": [4, 1, 1, 1]
+        }
+    ).set_index(['sex', 'age_bin'])
+
     with pytest.raises(KeyError, match=r"There is no data on cases for"):
         seed.infect_super_areas(n_daily_cases_by_super_area)
 
+
 def test__infection_per_day(world, selector):
     clean_world(world)
-    cases_per_super_area_df = pd.DataFrame(
-        {"date": ["2020-04-20", "2020-04-21"], 
-            "super_1": [1, 2],
-            "super_2": [5, 6]}
+    world.super_areas.members[0].name = "D01001"
+    world.super_areas.members[1].name = "D01002"
+
+    seed = InfectionSeed(
+        world=world,
+        infection_selector=selector,
+        path_to_csv=infpath,
     )
 
-    cases_per_super_area_df.set_index('date', inplace=True)
-    cases_per_super_area_df.index = pd.to_datetime(cases_per_super_area_df.index)
-    seed = InfectionSeed(
-        world=world, infection_selector=selector, daily_super_area_cases=cases_per_super_area_df,
-    )
-    assert seed.min_date.strftime('%Y-%m-%d') == '2020-04-20'
-    assert seed.max_date.strftime('%Y-%m-%d') == '2020-04-21'
-    timer = Timer(initial_day="2020-04-20", total_days=7,)
-    seed.unleash_virus_per_day( timer.date)
-    next(timer)
+    timer = Timer(initial_day="2020-04-20", total_days=7, )
+    # each timestep during weekdays = 12h
+    seed.unleash_virus_per_day(timer.date)
+    next(timer)  # 2020-04-20 0:00
     assert (
-        len([person for person in world.super_areas[0].people if person.infected]) == 1
+            len([person for person in world.super_areas[0].people if person.infected]) == 0
     )
     assert (
-        len([person for person in world.super_areas[1].people if person.infected]) == 5
+            len([person for person in world.super_areas[1].people if person.infected]) == 9
     )
 
     seed.unleash_virus_per_day(timer.date)
-    next(timer)
+    next(timer)  # 2020-04-20 12:00
     assert (
-        len([person for person in world.super_areas[0].people if person.infected]) == 1
+            len([person for person in world.super_areas[0].people if person.infected]) == 0
     )
     assert (
-        len([person for person in world.super_areas[1].people if person.infected]) == 5
-    )
-
-    seed.unleash_virus_per_day( timer.date)
-    next(timer)
-
-    assert (
-        len([person for person in world.super_areas[0].people if person.infected])
-        == 1 + 2
-    )
-    assert (
-        len([person for person in world.super_areas[1].people if person.infected])
-        == 5 + 6
+            len([person for person in world.super_areas[1].people if person.infected]) == 9
     )
 
-    seed.unleash_virus_per_day( timer.date)
-    next(timer)
+    seed.unleash_virus_per_day(timer.date)
+    next(timer)  # 2020-04-21 0:00
 
     assert (
-        len([person for person in world.super_areas[0].people if person.infected])
-        == 1 + 2
+            len([person for person in world.super_areas[0].people if person.infected])
+            == 0 + 0
     )
     assert (
-        len([person for person in world.super_areas[1].people if person.infected])
-        == 5 + 6
+            len([person for person in world.super_areas[1].people if person.infected])
+            == 9 + 4
     )
 
-    seed.unleash_virus_per_day( timer.date)
-    next(timer)
+    seed.unleash_virus_per_day(timer.date)
+    next(timer)  # 2020-04-21 12:00
 
     assert (
-        len([person for person in world.super_areas[0].people if person.infected])
-        == 1 + 2
+            len([person for person in world.super_areas[0].people if person.infected])
+            == 0 + 0
     )
     assert (
-        len([person for person in world.super_areas[1].people if person.infected])
-        == 5 + 6
+            len([person for person in world.super_areas[1].people if person.infected])
+            == 9 + 4
     )
+
+    seed.unleash_virus_per_day(timer.date)
+    next(timer)  # 2020-04-22 0:00
+
+    assert (
+            len([person for person in world.super_areas[0].people if person.infected])
+            == 0 + 0
+    )
+    assert (
+            len([person for person in world.super_areas[1].people if person.infected])
+            == 9 + 4 + 3
+    )
+
 
 def test__age_profile(world, selector):
     clean_world(world)
@@ -166,6 +194,7 @@ def test__age_profile(world, selector):
         world=world,
         infection_selector=selector,
         age_profile={"0-9": 0.0, "10-39": 1.0, "40-100": 0.0},
+        path_to_csv=infpath,
     )
     seed.unleash_virus(Population(world.people), n_cases=20)
     should_not_infected = [
@@ -178,7 +207,6 @@ def test__age_profile(world, selector):
     should_infected = [
         person
         for person in world.people
-        if person.infected and (person.age >= 10 and person.age < 40)
+        if person.infected and (10 <= person.age < 40)
     ]
     assert len(should_infected) == 20 
-
