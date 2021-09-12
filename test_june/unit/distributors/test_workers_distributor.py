@@ -55,8 +55,8 @@ def create_population(worker_geography, worker_demography):
 
 def test__load_workflow_df(worker_super_areas):
     wf_df = load_workflow_df(area_names=worker_super_areas,)
-    assert wf_df["n_man"].sum() == len(worker_super_areas)
-    assert wf_df["n_woman"].sum() == len(worker_super_areas)
+    assert np.isclose(wf_df["n_man"].sum(), len(worker_super_areas))
+    assert np.isclose(wf_df["n_woman"].sum(), len(worker_super_areas))
 
 
 def test__load_sex_per_sector(worker_super_areas):
