@@ -199,7 +199,7 @@ class Record:
             current_intensive_care,
         ) = self.summarise_hospitalisations(world=world)
         current_susceptible = self.summarise_susceptibles(world=world)
-        daily_true_pos_tests, daily_false_pos_tests, daily_false_neg_tests, daily_true_neg_tests = self.summarise_tests(world=world)
+        daily_true_pos_tests, daily_false_pos_tests, daily_true_neg_tests, daily_false_neg_tests = self.summarise_tests(world=world)
         daily_deaths, daily_deaths_in_hospital = self.summarise_deaths(world=world)
         all_hospital_regions = [hospital.region_name for hospital in world.hospitals]
         all_world_regions = [region.name for region in world.regions]
