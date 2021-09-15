@@ -1,16 +1,16 @@
 number_of_inter_city_stations: # each city also acts like an station for internal commuters.
-  "Frankfurt (Main)": 4
-  "Köln": 4
+  "Frankfurt am Main": 4
+  "Koeln": 4
   "Berlin": 4
   "Hamburg": 4
-  "München": 4
+  "Muenchen": 4
   "Stuttgart": 4
-  "Düsseldorf": 4
+  "Duesseldorf": 4
   "Duisburg": 4
   "Dortmund": 4
   "Mannheim": 4
   "Hannover": 4
-  "Nürnberg": 4
+  "Nuernberg": 4
   "Essen": 4
   "Bremen": 4
   "Leipzig": 4

@@ -1,18 +1,18 @@
 # seats per passenger
 # TODO: use real data
 seats_per_passenger:
-  Frankfurt (Main): 1
-  Köln: 1
+  Frankfurt am Main: 1
+  Koeln: 1
   Berlin: 1
   Hamburg: 1
-  München: 1
+  Muenchen: 1
   Stuttgart: 1
-  Düsseldorf: 1
+  Duesseldorf: 1
   Duisburg: 1
   Dortmund: 1
   Mannheim: 1
   Hannover: 1
-  Nürnberg: 1
+  Nuernberg: 1
   Essen: 1
   Bremen: 1
   Leipzig: 1
