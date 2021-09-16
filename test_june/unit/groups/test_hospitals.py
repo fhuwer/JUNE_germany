@@ -59,7 +59,7 @@ def test__initialize_hospitals_from_geography():
     assert len(hospitals.members) == 4
     assert hospitals.members[2].super_area.name == 'D07339' 
     assert hospitals.members[0].super_area.name == 'D07315' 
-    assert hospitals.members[0].n_beds + hospitals.members[0].n_icu_beds == 1110 + 117 
-    assert hospitals.members[2].n_beds + hospitals.members[2].n_icu_beds == 169 + 9 
+    assert hospitals.members[0].n_beds + hospitals.members[0].n_icu_beds == 1110 + 59
+    assert hospitals.members[2].n_beds + hospitals.members[2].n_icu_beds == 169 + 5
     assert hospitals.members[0].trust_code == 'HOS0754' 
 
