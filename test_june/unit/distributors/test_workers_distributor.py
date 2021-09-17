@@ -91,12 +91,6 @@ class TestDistribution:
         worker_population: Population,
     ):
         case = unittest.TestCase()
-        g = 0
-        for p in worker_population:
-            if worker_config["age_range"][0] <= p.age <= worker_config["age_range"][1]:
-                if p.work_super_area is None:
-                    g = g+1
-
         work_super_area_name = np.array(
             [
                 person.work_super_area.name
