@@ -3,16 +3,16 @@ number_of_inter_city_stations: # each city also acts like an station for interna
   "Ludwigshafen am Rhein": 4
   "Koblenz": 4
   "Trier": 4
-  "Kaiserslautern": 4
-  "Worms": 4
-  "Neuwied": 4
-  "Neustadt an der Weinstrasse": 4
-  "Bad Kreuznach": 4
-  "Speyer": 4
-  "Frankenthal (Pfalz)": 4
-  "Idar-Oberstein": 4
-  "Zweibruecken": 4
-  "Landau in der Pfalz": 4
+#  "Kaiserslautern": 4
+#  "Worms": 4
+#  "Neuwied": 4
+#  "Neustadt an der Weinstrasse": 4
+#  "Bad Kreuznach": 4
+#  "Speyer": 4
+#  "Frankenthal (Pfalz)": 4
+#  "Idar-Oberstein": 4
+#  "Zweibruecken": 4
+#  "Landau in der Pfalz": 4
 
 
 
