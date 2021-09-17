@@ -189,8 +189,8 @@ class WorkerDistributor:
             if work_location in list(self.non_geographical_work_location):
                 if self.non_geographical_work_location[work_location] == "home":
                     person.work_super_area = None
-                elif self.non_geographical_work_location[work_location] == "bind":
-                    self._select_rnd_superarea(person)
+                # elif self.non_geographical_work_location[work_location] == "bind":
+                #     self._select_rnd_superarea(person)
                 else:
                     raise KeyError(
                         f"Work location {work_location} not found in world's geogeraphy"

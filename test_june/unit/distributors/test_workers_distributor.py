@@ -25,7 +25,7 @@ def load_config():
 
 @pytest.fixture(name="worker_super_areas", scope="module")
 def use_super_areas():
-    return ["D07315", "D07331", "D07339", "D07141"]
+    return ["D07315"]
 
 
 @pytest.fixture(name="worker_geography", scope="module")
@@ -91,6 +91,12 @@ class TestDistribution:
         worker_population: Population,
     ):
         case = unittest.TestCase()
+        g = 0
+        for p in worker_population:
+            if worker_config["age_range"][0] <= p.age <= worker_config["age_range"][1]:
+                if p.work_super_area is None:
+                    g = g+1
+
         work_super_area_name = np.array(
             [
                 person.work_super_area.name
@@ -121,7 +127,7 @@ class TestDistribution:
                 and person.work_super_area is None 
             ]
         )
-        assert 0.050 < nr_working_from_home / len(worker_population) < 0.070
+        assert 0.16 < nr_working_from_home / len(worker_population) < 0.33
 
     def test__worker_nr_in_sector_larger_than_its_sub(
         self,
