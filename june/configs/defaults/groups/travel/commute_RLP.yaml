@@ -5,12 +5,12 @@ seats_per_passenger:
   "Ludwigshafen am Rhein": 1
   Koblenz: 1
   Trier: 1
-#  Kaiserslautern: 1
-#  Worms: 1
+  Kaiserslautern: 1
+  Worms: 1
+  "Neustadt an der Weinstrasse": 1
+  Speyer: 1
 #  Neuwied: 1
-#  "Neustadt an der Weinstrasse": 1
 #  "Bad Kreuznach": 1
-#  Speyer: 1
 #  "Frankenthal (Pfalz)": 1
 #  Idar-Oberstein: 1
 #  Zweibruecken: 1
