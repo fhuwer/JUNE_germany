@@ -1,7 +1,7 @@
 # seats per passenger
 # TODO: use real data
 seats_per_passenger:
-  Frankfurt am Main: 1
+  "Frankfurt am Main": 1
   Koeln: 1
   Berlin: 1
   Hamburg: 1
