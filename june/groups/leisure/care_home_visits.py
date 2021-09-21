@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import yaml
-from random import randint, shuffle
+from random import randint, choice
 from june.geography import Areas, SuperAreas
 from june.groups import CareHomes, Households, Household, CareHome
 
@@ -53,29 +53,16 @@ class CareHomeVisitsDistributor(SocialVenueDistributor):
                 households_super_area += [
                     household
                     for household in area.households
-                    if household.type in ["families", "ya_parents", "nokids"]
+                    if household.type in ["family", "ya_parents", "nokids"]
                 ]
-                shuffle(households_super_area)
             for area in super_area.areas:
                 if area.care_home is not None:
-                    people_in_care_home = [
-                        person for person in area.care_home.residents
-                    ]
-                    for i, person in enumerate(people_in_care_home):
-                        if (
-                            "care_home"
-                            not in households_super_area[i].residences_to_visit
-                        ):
-                            households_super_area[i].residences_to_visit[
-                                "care_home"
-                            ] = (area.care_home,)
-                        else:
-                            households_super_area[i].residences_to_visit["care_home"] = tuple(
-                                (
-                                    *households_super_area[i].residences_to_visit["care_home"],
-                                    area.care_home,
-                                )
-                            )
+                    for person in area.care_home.residents:
+                        household = choice(households_super_area)
+                        household.residences_to_visit["care_home"] = (
+                            *household.residences_to_visit.get("care_home", []),
+                            area.care_home
+                        )
 
     def get_social_venue_for_person(self, person):
         care_homes_to_visit = person.residence.group.residences_to_visit["care_home"]
