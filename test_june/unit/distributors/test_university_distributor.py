@@ -18,9 +18,9 @@ def create_world():
 
 def test__students_go_to_uni(world):
     universities = Universities.for_areas(world.areas)
-    durham = universities[0]
+    mainz = universities[0]
     university_distributor = UniversityDistributor(universities)
     university_distributor.distribute_students_to_universities(
         areas=world.areas, people=world.people
     )
-    assert durham.n_students > 10000
+    assert mainz.n_students > 10000
