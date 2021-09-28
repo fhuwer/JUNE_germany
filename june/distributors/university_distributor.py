@@ -63,28 +63,32 @@ class UniversityDistributor:
         the university.
         """
         logger.info(f"Distributing students to universities")
-        need_more_students = True
+        need_more_students = set([university.ukprn for university in self.universities])
         distance_increment = 10
         distance = 5
-        while need_more_students and distance < 45:
-            students_dict = self._build_student_dict(areas=areas, distance=distance)
+        while len(need_more_students) > 0 and distance < 45:
+            students_dict = self._build_student_dict(
+                areas=areas,
+                distance=distance,
+                need_more_students=need_more_students,
+            )
             self._assign_students_to_unis(students_dict=students_dict, people=people)
             distance += distance_increment
-            need_more_students = False
             for university in self.universities:
-                if university.n_students < university.n_students_max:
-                    need_more_students = True
-                    break
+                if university.ukprn in need_more_students and university.n_students >= university.n_students_max:
+                    need_more_students.remove(university.ukprn)
         uni_info_dict = {
             university.ukprn: university.n_students for university in self.universities
         }
         for key, value in uni_info_dict.items():
             logger.info(f"University {key} has {value} students.")
 
-    def _build_student_dict(self, areas, distance):
+    def _build_student_dict(self, areas, distance, need_more_students):
         students_dict = defaultdict(lambda: defaultdict(list))
         # get students in areas
         for university in self.universities:
+            if university.ukprn not in need_more_students:
+                continue
             close_areas, distances = areas.get_closest_areas(
                 coordinates=university.coordinates, k=min(len(areas), 1000), return_distance=True,
             )
