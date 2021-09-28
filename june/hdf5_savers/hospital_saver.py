@@ -3,7 +3,7 @@ import numpy as np
 
 from june.world import World
 from june.groups import Hospital, Hospitals, ExternalHospital
-from .utils import read_dataset
+from .utils import read_dataset, escape_umlaute, unescape_umlaute
 
 nan_integer = -999
 
@@ -51,7 +51,7 @@ def save_hospitals_to_hdf5(
                 else:
                     areas.append(hospital.area.id)
                     super_areas.append(hospital.super_area.id)
-                    region_names.append(hospital.region_name)
+                    region_names.append(escape_umlaute(hospital.region_name))
                 n_beds.append(hospital.n_beds)
                 n_icu_beds.append(hospital.n_icu_beds)
                 coordinates.append(np.array(hospital.coordinates))
@@ -157,7 +157,7 @@ def load_hospitals_from_hdf5(
                         id=ids[k],
                         spec="hospital",
                         domain_id=super_areas_to_domain_dict[super_area],
-                        region_name=region_name[k].decode(),
+                        region_name=unescape_umlaute(region_name[k].decode()),
                     )
                 else:
                     hospital = Hospital(

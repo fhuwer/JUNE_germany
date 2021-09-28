@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from june.groups import ExternalGroup, ExternalSubgroup
 from june.geography import Geography, Area, SuperArea, Areas, SuperAreas, Region, Regions
-from .utils import read_dataset
+from .utils import read_dataset, escape_umlaute, unescape_umlaute
 from june.world import World
 
 nan_integer = -999
@@ -126,7 +126,7 @@ def save_geography_to_hdf5(geography: Geography, file_path: str):
 
         for region in geography.regions:
             region_ids.append(region.id)
-            region_names.append(region.name)
+            region_names.append(escape_umlaute(region.name))
         cities = []
         stations = []
         for key, value in super_area.closest_inter_city_station_for_city.items():
@@ -311,7 +311,7 @@ def load_geography_from_hdf5(file_path: str, chunk_size=50000, domain_super_area
                     if region_id not in domain_regions:
                         continue
                 region = Region(
-                    name=region_names[k].decode(),
+                    name=unescape_umlaute(region_names[k].decode()),
                     super_areas=None,
                 )
                 region.id = region_ids[k]
