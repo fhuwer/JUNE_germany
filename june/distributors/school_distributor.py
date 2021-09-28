@@ -8,7 +8,7 @@ from june import paths
 from june.geography import Area, SuperArea, Geography
 from june.groups.school import Schools
 from random import randint, shuffle
-from numpy import poisson
+from numpy.random import poisson
 
 default_config_filename = (
     paths.configs_path / "defaults/distributors/school_distributor.yaml"
