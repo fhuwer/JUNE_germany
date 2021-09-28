@@ -8,6 +8,9 @@ import numpy as np
 import pandas as pd
 import yaml
 from scipy.stats import rv_discrete
+from random import randint, choice, shuffle
+from numpy import argmin
+from numpy import abs as nabs
 
 from june import paths
 from june.demography import Person
@@ -56,15 +59,12 @@ class HouseholdError(BaseException):
 
 
 def get_closest_element_in_array(array, value):
-    min_idx = np.argmin(np.abs(value - array))
+    min_idx = argmin(nabs(value - array))
     return array[min_idx]
 
 
 def count_items_in_dict(dictionary):
-    counter = 0
-    for age in dictionary:
-        counter += len(dictionary[age])
-    return counter
+    return sum(map(len, dictionary.values()))
 
 
 def count_remaining_people(dict1, dict2):
@@ -167,7 +167,6 @@ class HouseholdDistributor:
                 list(couples_age_differences.values()),
             )
         )
-        self._random_sex_rv = rv_discrete(values=((0, 1), (0.5, 0.5)))
         self._refresh_random_numbers_list(number_of_random_numbers)
 
     @classmethod
@@ -254,7 +253,6 @@ class HouseholdDistributor:
         self._second_kid_parent_age_diff_list = list(
             self._second_kid_parent_age_diff_rv.rvs(size=n)
         )
-        self._random_sex_list = list(self._random_sex_rv.rvs(size=2*n))
 
     def _create_people_dicts(self, area: Area):
         """
@@ -832,8 +830,8 @@ class HouseholdDistributor:
         max_age:
             The maximum age the person should have.
         """
-        sex = self._random_sex_list.pop()
-        age = np.random.randint(min_age, max_age + 1)
+        sex = randint(0, 1)
+        age = randint(min_age, max_age)
         if sex == 0:
             person = self._get_closest_person_of_age(
                 men_by_age, women_by_age, age, min_age, max_age
@@ -1006,46 +1004,55 @@ class HouseholdDistributor:
         # fill students to households
         students_left = n_students
         student_houses = []
-        for _ in range(0, student_houses_number):
-            household = self._create_household(area, type="student")
+        student_min_age, student_max_age = self.student_min_age, self.student_max_age
+        _get_random_person_in_age_bracket = self._get_random_person_in_age_bracket
+        _create_household = self._create_household
+        subgroup_young_adults = Household.SubgroupType.young_adults
+        for _ in range(student_houses_number):
+            household = _create_household(area, type="student")
             student_houses.append(household)
-            for _ in range(0, ratio):
-                student = self._get_random_person_in_age_bracket(
+            for _ in range(ratio):
+                student = _get_random_person_in_age_bracket(
                     men_by_age,
                     women_by_age,
-                    min_age=self.student_min_age,
-                    max_age=self.student_max_age,
+                    min_age=student_min_age,
+                    max_age=student_max_age,
                 )
                 if student is None:
-                    student = self._get_random_person_in_age_bracket(
+                    student = _get_random_person_in_age_bracket(
                         men_by_age,
                         women_by_age,
-                        min_age=self.student_min_age,
-                        max_age=self.student_max_age + 10,
+                        min_age=student_min_age,
+                        max_age=student_max_age + 10,
                     )
-                self._add_to_household(household, student, subgroup="young_adults")
+                if student is None:
+                    break
+                household.add(student, subgroup_young_adults)
                 students_left -= 1
         assert students_left >= 0
         index = 0
+        num_student_houses = len(student_houses)
         while students_left:
             household = student_houses[index]
-            student = self._get_random_person_in_age_bracket(
+            student = _get_random_person_in_age_bracket(
                 men_by_age,
                 women_by_age,
-                min_age=self.student_min_age,
-                max_age=self.student_max_age,
+                min_age=student_min_age,
+                max_age=student_max_age,
             )
             if student is None:
-                student = self._get_random_person_in_age_bracket(
+                student = _get_random_person_in_age_bracket(
                     men_by_age,
                     women_by_age,
-                    min_age=self.student_min_age,
-                    max_age=self.student_max_age + 10,
+                    min_age=student_min_age,
+                    max_age=student_max_age + 10,
                 )
-            self._add_to_household(household, student, subgroup="young_adults")
+            if student is None:
+                break
+            household.add(student, subgroup_young_adults)
             students_left -= 1
             index += 1
-            index = index % len(student_houses)
+            index = index % num_student_houses
         return student_houses
 
     def fill_oldpeople_households(
@@ -1074,36 +1081,41 @@ class HouseholdDistributor:
             The maximum size of the created households.
         """
         households = []
-        for i in range(0, n_households):
-            household = self._create_household(
+        old_min_age, old_max_age = self.old_min_age, self.old_max_age
+        _get_random_person_in_age_bracket = self._get_random_person_in_age_bracket
+        _create_household = self._create_household
+        _get_matching_partner = self._get_matching_partner
+        subgroup_old_adults = Household.SubgroupType.old_adults
+        for i in range(n_households):
+            household = _create_household(
                 area, max_household_size=max_household_size, type="old"
             )
             households.append(household)
-            person = self._get_random_person_in_age_bracket(
+            person = _get_random_person_in_age_bracket(
                 men_by_age,
                 women_by_age,
-                min_age=self.old_min_age,
-                max_age=self.old_max_age,
+                min_age=old_min_age,
+                max_age=old_max_age,
             )
             if person is None:
                 # no old people left, leave the house and the rest empty and adults can come here later.
                 for array in extra_people_lists:
                     array.append(household)
                 for _ in range(i + 1, n_households):
-                    household = self._create_household(
+                    household = _create_household(
                         area, max_household_size=max_household_size, type="old"
                     )
                     households.append(household)
                     for array in extra_people_lists:
                         array.append(household)
                 return households
-            self._add_to_household(household, person, subgroup="old")
+            household.add(person, subgroup_old_adults)
             if people_per_household > 1 and person is not None:
-                partner = self._get_matching_partner(
+                partner = _get_matching_partner(
                     person, men_by_age, women_by_age, over_65=True
                 )
                 if partner is not None:
-                    self._add_to_household(household, partner, subgroup="old")
+                    household.add(partner, subgroup_old_adults)
             if household.size < household.max_size:
                 for array in extra_people_lists:
                     array.append(household)
@@ -1145,33 +1157,42 @@ class HouseholdDistributor:
             The maximum size of the created households.
         """
         households = []
+
+        kid_max_age = self.kid_max_age
+        young_adult_min_age, young_adult_max_age = self.young_adult_min_age, self.young_adult_max_age
+        old_min_age, old_max_age = self.old_min_age, self.old_max_age
+        _get_random_person_in_age_bracket = self._get_random_person_in_age_bracket
+        _create_household = self._create_household
+        subgroup_kids = Household.SubgroupType.kids
+        subgroup_young_adults = Household.SubgroupType.young_adults
+        subgroup_adults = Household.SubgroupType.adults
+        subgroup_old_adults = Household.SubgroupType.old_adults
+
         for i in range(0, n_households):
-            household = self._create_household(
+            household = _create_household(
                 area, max_household_size=max_household_size, type="family"
             )
             households.append(household)
-            first_kid = self._get_random_person_in_age_bracket(
+            first_kid = _get_random_person_in_age_bracket(
                 men_by_age, women_by_age, min_age=0, max_age=self.kid_max_age
             )
             if first_kid is not None:
-                self._add_to_household(household, first_kid, subgroup="kids")
+                household.add(first_kid, subgroup_kids)
             else:
                 # fill with young adult instead
-                first_kid = self._get_random_person_in_age_bracket(
+                first_kid = _get_random_person_in_age_bracket(
                     men_by_age,
                     women_by_age,
-                    min_age=self.young_adult_min_age,
-                    max_age=self.young_adult_max_age,
+                    min_age=young_adult_min_age,
+                    max_age=young_adult_max_age,
                 )
                 if first_kid is not None:
-                    self._add_to_household(
-                        household, first_kid, subgroup="young_adults"
-                    )
+                    household.add(first_kid, subgroup_young_adults)
                 else:
                     for array in extra_people_lists:
                         array.append(household)
                     for _ in range(i + 1, n_households):
-                        household = self._create_household(
+                        household = _create_household(
                             area, max_household_size=max_household_size, type="family"
                         )
                         households.append(household)
@@ -1192,12 +1213,12 @@ class HouseholdDistributor:
                 #      "Orphan kid. Check household configuration and population."
                 #  )
             if first_parent is not None:
-                self._add_to_household(household, first_parent, subgroup="adults")
+                household.add(first_parent, subgroup_adults)
             else:
                 for array in extra_people_lists:
                     array.append(household)
                 for _ in range(i + 1, n_households):
-                    household = self._create_household(
+                    household = _create_household(
                         area, max_household_size=max_household_size, type="family"
                     )
                     households.append(household)
@@ -1209,40 +1230,38 @@ class HouseholdDistributor:
                 array.append(household)
             if old_per_house > 0:
                 for _ in range(old_per_house):
-                    random_old = self._get_random_person_in_age_bracket(
+                    random_old = _get_random_person_in_age_bracket(
                         men_by_age,
                         women_by_age,
-                        min_age=self.old_min_age,
-                        max_age=self.old_max_age,
+                        min_age=old_min_age,
+                        max_age=old_max_age,
                     )
                     if random_old is None:
                         break
-                    self._add_to_household(household, random_old, subgroup="old")
+                    household.add(random_old, subgroup_old_adults)
 
             if parents_per_house == 2 and first_parent is not None:
                 second_parent = self._get_matching_partner(
                     first_parent, men_by_age, women_by_age
                 )
                 if second_parent is not None:
-                    self._add_to_household(household, second_parent, subgroup="adults")
+                    household.add(second_parent, subgroup_adults)
 
             if kids_per_house == 2:
                 second_kid = self._get_matching_second_kid(
                     first_parent, men_by_age, women_by_age
                 )
                 if second_kid is not None:
-                    self._add_to_household(household, second_kid, subgroup="kids")
+                    household.add(second_kid, subgroup_kids)
                 else:
-                    second_kid = self._get_random_person_in_age_bracket(
+                    second_kid = _get_random_person_in_age_bracket(
                         men_by_age,
                         women_by_age,
-                        min_age=self.young_adult_min_age,
-                        max_age=self.young_adult_max_age,
+                        min_age=young_adult_min_age,
+                        max_age=young_adult_max_age,
                     )
                     if second_kid is not None:
-                        self._add_to_household(
-                            household, second_kid, subgroup="young_adults"
-                        )
+                        household.add(second_kid, subgroup_young_adults)
         return households
 
     def fill_nokids_households(
@@ -1272,30 +1291,38 @@ class HouseholdDistributor:
             maximum size of the created households.
         """
         households = []
-        for _ in range(0, n_households):
-            household = self._create_household(
+
+        adult_min_age, adult_max_age = self.adult_min_age, self.adult_max_age
+        old_min_age, old_max_age = self.old_min_age, self.old_max_age
+        _get_random_person_in_age_bracket = self._get_random_person_in_age_bracket
+        _create_household = self._create_household
+        _check_if_oldpeople_left = self._check_if_oldpeople_left
+        subgroup_adults = Household.SubgroupType.adults
+
+        for _ in range(n_households):
+            household = _create_household(
                 area, max_household_size=max_household_size, type="nokids"
             )
             households.append(household)
-            if self._check_if_oldpeople_left(men_by_age, women_by_age):
+            if _check_if_oldpeople_left(men_by_age, women_by_age):
                 # if there are old people left, then put them here together with another adult.
-                first_adult = self._get_random_person_in_age_bracket(
+                first_adult = _get_random_person_in_age_bracket(
                     men_by_age,
                     women_by_age,
-                    min_age=self.old_min_age,
-                    max_age=self.old_max_age,
+                    min_age=old_min_age,
+                    max_age=old_max_age,
                 )
                 if first_adult is None:
                     raise HouseholdError("But you said there were old people left!")
             else:
-                first_adult = self._get_random_person_in_age_bracket(
+                first_adult = _get_random_person_in_age_bracket(
                     men_by_age,
                     women_by_age,
-                    min_age=self.adult_min_age,
-                    max_age=self.adult_max_age,
+                    min_age=adult_min_age,
+                    max_age=adult_max_age,
                 )
             if first_adult is not None:
-                self._add_to_household(household, first_adult, subgroup="adults")
+                household.add(first_adult, subgroup_adults)
             if adults_per_household == 1:
                 if household.size < household.max_size:
                     for array in extra_people_lists:
@@ -1307,7 +1334,7 @@ class HouseholdDistributor:
                     first_adult, men_by_age, women_by_age
                 )
                 if second_adult is not None:
-                    self._add_to_household(household, second_adult, subgroup="adults")
+                    household.add(second_adult, subgroup_adults)
             if household.size < household.max_size:
                 for array in extra_people_lists:
                     array.append(household)
@@ -1337,18 +1364,24 @@ class HouseholdDistributor:
             whether to include the created households in a list for extra people to be put in.
         """
         households = []
-        for _ in range(0, n_households):
-            household = self._create_household(area, type="youngadults")
+
+        young_adult_min_age, young_adult_max_age = self.young_adult_min_age, self.young_adult_max_age
+        _get_random_person_in_age_bracket = self._get_random_person_in_age_bracket
+        _create_household = self._create_household
+        subgroup_young_adults = Household.SubgroupType.young_adults
+
+        for _ in range(n_households):
+            household = _create_household(area, type="youngadults")
             households.append(household)
             for _ in range(youngadults_per_household):
-                person = self._get_random_person_in_age_bracket(
+                person = _get_random_person_in_age_bracket(
                     men_by_age,
                     women_by_age,
-                    min_age=self.young_adult_min_age,
-                    max_age=self.young_adult_max_age,
+                    min_age=young_adult_min_age,
+                    max_age=young_adult_max_age,
                 )
                 if person is not None:
-                    self._add_to_household(household, person, subgroup="young_adults")
+                    household.add(person, subgroup_young_adults)
             for array in extra_people_lists:
                 array.append(household)
         return households
@@ -1377,36 +1410,44 @@ class HouseholdDistributor:
             whether to include the created households in a list for extra people to be put in.
         """
         households = []
+
+        young_adult_min_age, young_adult_max_age = self.young_adult_min_age, self.young_adult_max_age
+        adult_min_age, adult_max_age = self.adult_min_age, self.adult_max_age
+        _get_random_person_in_age_bracket = self._get_random_person_in_age_bracket
+        _create_household = self._create_household
+        subgroup_young_adults = Household.SubgroupType.young_adults
+        subgroup_adults = Household.SubgroupType.adults
+
         for _ in range(0, n_households):
-            household = self._create_household(area, "ya_parents")
+            household = _create_household(area, "ya_parents")
             households.append(household)
             for array in extra_people_lists:
                 array.append(household)
-            youngadult = self._get_random_person_in_age_bracket(
+            youngadult = _get_random_person_in_age_bracket(
                 men_by_age,
                 women_by_age,
-                min_age=self.young_adult_min_age,
-                max_age=self.young_adult_max_age,
+                min_age=young_adult_min_age,
+                max_age=young_adult_max_age,
             )
             if youngadult is not None:
-                self._add_to_household(household, youngadult, subgroup="young_adults")
+                household.add(youngadult, subgroup_young_adults)
             for _ in range(adults_per_household):
                 if youngadult is not None:
-                    adult = self._get_random_person_in_age_bracket(
+                    adult = _get_random_person_in_age_bracket(
                         men_by_age,
                         women_by_age,
                         min_age=youngadult.age + 18,
-                        max_age=self.adult_max_age,
+                        max_age=adult_max_age,
                     )
                 else:
-                    adult = self._get_random_person_in_age_bracket(
+                    adult = _get_random_person_in_age_bracket(
                         men_by_age,
                         women_by_age,
-                        min_age=self.adult_min_age,
-                        max_age=self.adult_max_age,
+                        min_age=adult_min_age,
+                        max_age=adult_max_age,
                     )
                 if adult is not None:
-                    self._add_to_household(household, adult, subgroup="adults")
+                    household.add(adult, subgroup_adults)
         return households
 
     def fill_all_communal_establishments(
@@ -1433,46 +1474,52 @@ class HouseholdDistributor:
         people_left = n_people_in_communal
         communal_houses = []
         no_adults = False
+
+        _get_random_person_in_age_bracket = self._get_random_person_in_age_bracket
+        _create_household = self._create_household
+        subgroup_default = Household.SubgroupType.adults
+
         for _ in range(0, n_establishments):
             for i in range(ratio):
                 if i == 0:
-                    person = self._get_random_person_in_age_bracket(
+                    person = _get_random_person_in_age_bracket(
                         men_by_age, women_by_age, min_age=18
                     )
                     if person is None:
                         no_adults = True
                         break
-                    household = self._create_household(area, type="communal")
+                    household = _create_household(area, type="communal")
                     communal_houses.append(household)
-                    self._add_to_household(household, person, subgroup="default")
+                    household.add(person, subgroup_default)
                     people_left -= 1
                 else:
-                    person = self._get_random_person_in_age_bracket(
+                    person = _get_random_person_in_age_bracket(
                         men_by_age, women_by_age
                     )
-                    self._add_to_household(household, person, subgroup="default")
+                    household.add(person, subgroup_default)
                     people_left -= 1
             if no_adults:
                 break
 
         index = 0
+        num_communal_houses = len(communal_houses)
         while people_left > 0:
             if not communal_houses:
                 # this extreme case happens in area E00174453 (only case in England!!!)
-                person = self._get_random_person_in_age_bracket(
+                person = _get_random_person_in_age_bracket(
                     men_by_age, women_by_age, min_age=15
                 )
-                household = self._create_household(area, type="communal")
+                household = _create_household(area, type="communal")
                 communal_houses.append(household)
-                self._add_to_household(household, person, subgroup="default")
+                household.add(person, subgroup_default)
                 people_left -= 1
                 continue
-            person = self._get_random_person_in_age_bracket(men_by_age, women_by_age)
+            person = _get_random_person_in_age_bracket(men_by_age, women_by_age)
             household = communal_houses[index]
-            self._add_to_household(household, person, subgroup="default")
+            household.add(person, subgroup_default)
             people_left -= 1
             index += 1
-            index = index % len(communal_houses)
+            index = index % num_communal_houses
         return communal_houses
 
     def _remove_household_from_all_lists(self, household, lists: list) -> None:
@@ -1571,7 +1618,16 @@ class HouseholdDistributor:
                 people_left_dict[age] += men_by_age[age]
             if age in women_by_age:
                 people_left_dict[age] += women_by_age[age]
-            np.random.shuffle(people_left_dict[age])  # mix men and women
+            shuffle(people_left_dict[age])  # mix men and women
+
+        _find_household_for_nonkid = self._find_household_for_nonkid
+        _find_household_for_kid = self._find_household_for_kid
+        _check_if_household_is_full = self._check_if_household_is_full
+        _remove_household_from_all_lists = self._remove_household_from_all_lists
+        subgroup_old_adults = Household.SubgroupType.old_adults
+        subgroup_young_adults = Household.SubgroupType.young_adults
+        subgroup_adults = Household.SubgroupType.adults
+        subgroup_kids = Household.SubgroupType.kids
 
         # fill old people first
         for age in range(self.old_min_age, self.old_max_age + 1):
@@ -1579,21 +1635,21 @@ class HouseholdDistributor:
                 for person in people_left_dict[age]:
                     # old with old,
                     # otherwise random
-                    household = self._find_household_for_nonkid(
+                    household = _find_household_for_nonkid(
                         [households_with_extra_oldpeople,]
                     )
                     if household is None:
-                        household = self._find_household_for_nonkid(
+                        household = _find_household_for_nonkid(
                             [
                                 households_with_space,
                                 all_households_no_space_restrictions,
                             ]
                         )
                     if household is None:
-                        household = np.random.choice(all_households)
-                    self._add_to_household(household, person, subgroup="old")
-                    if self._check_if_household_is_full(household):
-                        self._remove_household_from_all_lists(
+                        household = choice(all_households)
+                    household.add(person, subgroup_old_adults)
+                    if _check_if_household_is_full(household):
+                        _remove_household_from_all_lists(
                             household, available_lists
                         )
 
@@ -1601,42 +1657,42 @@ class HouseholdDistributor:
         for age in range(self.young_adult_min_age, self.young_adult_max_age + 1):
             if age in people_left_dict:
                 for person in people_left_dict[age]:
-                    household = self._find_household_for_nonkid(
+                    household = _find_household_for_nonkid(
                         [households_with_extra_youngadults,]
                     )
                     if household is None:
-                        household = self._find_household_for_nonkid(
+                        household = _find_household_for_nonkid(
                             [
                                 households_with_space,
                                 all_households_no_space_restrictions,
                             ]
                         )
                     if household is None:
-                        household = np.random.choice(all_households)
-                    self._add_to_household(household, person, subgroup="young_adults")
-                    if self._check_if_household_is_full(household):
-                        self._remove_household_from_all_lists(
+                        household = choice(all_households)
+                    household.add(person, subgroup_young_adults)
+                    if _check_if_household_is_full(household):
+                        _remove_household_from_all_lists(
                             household, available_lists
                         )
         ## now adults
         for age in range(self.young_adult_max_age + 1, self.adult_max_age + 1):
             if age in people_left_dict:
                 for person in people_left_dict[age]:
-                    household = self._find_household_for_nonkid(
+                    household = _find_household_for_nonkid(
                         [households_with_extra_adults,]
                     )
                     if household is None:
-                        household = self._find_household_for_nonkid(
+                        household = _find_household_for_nonkid(
                             [
                                 households_with_space,
                                 all_households_no_space_restrictions,
                             ]
                         )
                     if household is None:
-                        household = np.random.choice(all_households)
-                    self._add_to_household(household, person, subgroup="adults")
-                    if self._check_if_household_is_full(household):
-                        self._remove_household_from_all_lists(
+                        household = choice(all_households)
+                    household.add(person, subgroup_adults)
+                    if _check_if_household_is_full(household):
+                        _remove_household_from_all_lists(
                             household, available_lists
                         )
 
@@ -1644,11 +1700,11 @@ class HouseholdDistributor:
         for age in range(0, self.kid_max_age + 1):
             if age in people_left_dict:
                 for person in people_left_dict[age]:
-                    household = self._find_household_for_kid(
+                    household = _find_household_for_kid(
                         [households_with_extra_kids,]
                     )
                     if household is None:
-                        household = self._find_household_for_nonkid(
+                        household = _find_household_for_nonkid(
                             [
                                 households_with_kids,
                                 # households_with_space,
@@ -1656,17 +1712,17 @@ class HouseholdDistributor:
                             ]
                         )
                     if household is None:
-                        household = self._find_household_for_nonkid(
+                        household = _find_household_for_nonkid(
                             [
                                 households_with_space,
                                 all_households_no_space_restrictions,
                             ]
                         )
                     if household is None:
-                        household = np.random.choice(all_households)
-                    self._add_to_household(household, person, subgroup="kids")
-                    if self._check_if_household_is_full(household):
-                        self._remove_household_from_all_lists(
+                        household = choice(all_households)
+                    household.add(person, subgroup_kids)
+                    if _check_if_household_is_full(household):
+                        _remove_household_from_all_lists(
                             household, available_lists
                         )
 
@@ -1684,7 +1740,7 @@ class HouseholdDistributor:
             list2 = [household for household in lis if household.size > 0]
             if not list2:
                 continue
-            household = np.random.choice(list2)
+            household = choice(list2)
             return household
 
     def _find_household_for_nonkid(self, priority_lists):
@@ -1700,5 +1756,5 @@ class HouseholdDistributor:
         for lis in priority_lists:
             if not lis:
                 continue
-            household = np.random.choice(lis)
+            household = choice(lis)
             return household
