@@ -3,6 +3,7 @@ import numpy as np
 
 from june.records.helper_records_writer import _get_description_for_event
 from june.groups import Supergroup
+from june.hdf5_savers.utils import escape_umlaute
 
 
 class StaticRecord:
@@ -237,7 +238,7 @@ class RegionRecord(StaticRecord):
         region_id, region_name = [], []
         for region in world.regions:
             region_id.append(region.id)
-            region_name.append(region.name)
+            region_name.append(escape_umlaute(region.name))
         int_data = [region_id]
         float_data = []
         str_data = [region_name]
