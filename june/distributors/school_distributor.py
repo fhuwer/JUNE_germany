@@ -166,7 +166,7 @@ class SchoolDistributor:
                         min(
                             len(closest_schools_by_age[person.age]),
                             neighbour_schools,
-                        ),
+                        ) - 1,
                     )
                     school = closest_schools_by_age[person.age][random_number]
                 else:
@@ -186,7 +186,7 @@ class SchoolDistributor:
                             min(
                                 len(closest_schools_by_age[person.age]),
                                 neighbour_schools,
-                            ),
+                            ) - 1,
                         )
                         school = closest_schools_by_age[person.age][random_number]
                     else:  # just keep the school saved in the previous for loop
