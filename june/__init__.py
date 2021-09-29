@@ -15,6 +15,7 @@ from .demography import Person
 from .exc import GroupException
 from .time import Timer
 from .world import World
+from .mpi_setup import mpi_rank
 
 default_logging_config_filename = (
         paths.configs_path /
@@ -24,6 +25,12 @@ default_logging_config_filename = (
 if os.path.isfile(default_logging_config_filename):
     with open(default_logging_config_filename, 'rt') as f:
         log_config = yaml.safe_load(f.read())
+        try:
+            log_config["formatters"]["simple"]["format"] = log_config["formatters"][
+                "simple"
+            ]["format"].format(mpi_rank=mpi_rank)
+        except KeyError:
+            pass
         logging.config.dictConfig(log_config)
 else:
     print("The logging config file does not exist.")
