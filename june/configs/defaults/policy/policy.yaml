@@ -29,32 +29,44 @@ regional_compliance:
     start_time: 1000-07-04
     end_time: 9999-12-01
     compliances_per_region:
+      Baden-Wuerttemberg: 1.
+      Bayern: 1.
+      Berlin: 1.
+      Brandenburg: 1.
+      Bremen: 1.
+      Hamburg: 1.
+      Hessen: 1.
+      Mecklenburg-Vorpommern: 1.
+      Niedersachsen: 1.
+      Nordrhein-Westfalen: 1.
       Rheinland-Pfalz: 1.
-      London: 1.15
-      South East: 0.99
-      South West: 0.99
-      West Midlands: 1.
-      East Midlands: 1.
-      East of England: 1.
-      North West: 0.95
-      North East: 0.95
-      Yorkshire and The Humber: 0.95
+      Saarland: 1.
+      Sachsen: 1.
+      Sachsen-Anhalt: 1.
+      Schleswig-Holstein: 1.
+      Thueringen: 1.
 
 tiered_lockdown:
   1:
     start_time: 2020-12-03
     end_time: 9999-12-01
     tiers_per_region:
+      Baden-Wuerttemberg: 1.
+      Bayern: 1.
+      Berlin: 1.
+      Brandenburg: 1.
+      Bremen: 1.
+      Hamburg: 1.
+      Hessen: 1.
+      Mecklenburg-Vorpommern: 1.
+      Niedersachsen: 1.
+      Nordrhein-Westfalen: 1.
       Rheinland-Pfalz: 1.
-      London: 2.
-      South East: 2.
-      South West: 2.
-      West Midlands: 3. # becuase of Birmingham
-      East Midlands: 3.
-      East of England: 2.
-      North West: 3. # becuase of Manchester
-      North East: 3.
-      Yorkshire and The Humber: 3. # because of Sheffield and Leeds etc.
+      Saarland: 1.
+      Sachsen: 1.
+      Sachsen-Anhalt: 1.
+      Schleswig-Holstein: 1.
+      Thueringen: 1.
 
 limit_long_commute:
   # prevents people that have their workplace
