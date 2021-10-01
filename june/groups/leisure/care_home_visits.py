@@ -58,7 +58,10 @@ class CareHomeVisitsDistributor(SocialVenueDistributor):
             for area in super_area.areas:
                 if area.care_home is not None:
                     for person in area.care_home.residents:
-                        household = choice(households_super_area)
+                        for i in range(5):
+                            household = choice(households_super_area)
+                            if len(household.residences_to_visit.get("care_home", [])) < 2:
+                                break
                         household.residences_to_visit["care_home"] = (
                             *household.residences_to_visit.get("care_home", []),
                             area.care_home
