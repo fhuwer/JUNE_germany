@@ -341,7 +341,11 @@ def create_full_world(full_world_geography, test_results):
     leisure.distribute_social_venues_to_areas(
         areas=world.areas, super_areas=world.super_areas
     )
-    travel = Travel()
+    travel = Travel(
+        city_super_areas_filename=paths.data_path / "input/geography/cities_per_super_area_rlp.csv",
+        city_stations_filename=paths.configs_path / "defaults/travel/city_stations_RLP.yaml",
+        commute_config_filename=paths.configs_path / "defaults/groups/travel/commute_RLP.yaml",
+    )
     travel.initialise_commute(world)
     return world
 
@@ -367,6 +371,10 @@ def create_domains_world():
     leisure.distribute_social_venues_to_areas(
         areas=world.areas, super_areas=world.super_areas
     )
-    travel = Travel()
+    travel = Travel(
+        city_super_areas_filename=paths.data_path / "input/geography/cities_per_super_area_rlp.csv",
+        city_stations_filename=paths.configs_path / "defaults/travel/city_stations_RLP.yaml",
+        commute_config_filename=paths.configs_path / "defaults/groups/travel/commute_RLP.yaml",
+    )
     travel.initialise_commute(world)
     return world

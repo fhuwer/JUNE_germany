@@ -139,14 +139,14 @@ class TestDomainDecomposition:
                             )
                             assert hospital.trust_code == hospital_domain.trust_code
                             assert hospital.region_name == hospital_domain.region_name
-                        else:
-                            for hospital_domain in domain.hospitals:
-                                if hospital_domain.id == domain.hospitals.id:
-                                    assert hospital_domain.external
-                                    assert (
-                                        hospital.region_name
-                                        == hospital_domain.region_name
-                                    )
+                        #  else:
+                        #      for hospital_domain in domain.hospitals:
+                        #          if hospital_domain.id == domain.hospitals.id:
+                        #              assert hospital_domain.external
+                        #              assert (
+                        #                  hospital.region_name
+                        #                  == hospital_domain.region_name
+                        #              )
 
     def test__stations_and_cities(self, domains_world, domains):
         assert len(domains_world.cities) > 0
