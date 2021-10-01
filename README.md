@@ -1,53 +1,35 @@
-![Python package](https://github.com/IDAS-Durham/JUNE/workflows/Python%20package/badge.svg?branch=master)
-[![codecov](https://codecov.io/gh/idas-durham/june/branch/master/graph/badge.svg?token=6TKUHtWxJZ)](https://codecov.io/gh/idas-durham/june)
+# JUNE Germany: open-source individual-based epidemiology simulation
 
-# JUNE: open-source individual-based epidemiology simulation
+This is the repository of the JUNE Germany project. It is based on version 1 of the JUNE project by the IDAS-Durham group [see JUNE](https://github.com/IDAS-Durham/JUNE) with minor changes to work for Germany.
 
-This is the offical repository of JUNE, named after [June Almeida](https://en.wikipedia.org/wiki/June_Almeida), who was the female Scottish virologist that first identified the coronavirus group of viruses. checkout the [release paper](https://www.medrxiv.org/content/10.1101/2020.12.15.20248246v1) for a physical description of the model.
-
+# Dataset
+Due to licenses the dataset is not shared publicly. If you are interested in receiving a copy of
+the dataset, please contact Friedemann Neuhaus (<fneuhaus@cern.ch>) and Matthias Schott
+(<mschott@cern.ch>).
 
 # Setup
-
-The easiest way to get JUNE up and running is to install the latest stable version,
-
-```
-pip install june
-```
-
-and download the data by running the command
-
-```
-get_june_data.sh
-```
-
-if the above command fails, then manually clone the repo and use the script ```scripts/get_june_data.sh```.
-
-
-Disclaimer: All the data is constructed by mixing different datasets from the Office for National Statistics (ONS), thus it may contain modifications. Please refere to the original source (cited in the [release paper](https://www.medrxiv.org/content/10.1101/2020.12.15.20248246v1)) for the raw dataset.
-
-This will require a working installation of Openmpi or Intelmpi to compile ``mpi4py``. 
-
-If you want to get the most up-to-date version of the code, then you can clone this repository, and install it using
-
+To install JUNE Germany, clone the repository and install it using
 ```
 pip install -e .
 ```
 
-This should automatically install any requirements as well. You can then get the data using the same command as the pip version.
+This should be done in a virtual environment.
+It will require a working installation of OpenMPI or IntelMPI to compile ``mpi4py``. 
+
+We tested everything with python3.8 only!
 
 # How to use the code
-
-Have a look at ``Notebooks/quickstart.ipynb`` for a gentle introduction to how JUNE works. You can also checkout some scripts in ``example_scripts``.
-
-The ``docs`` directory contains the source files and HTML outputs to
-display all information auto-generated from the `june` codebase docstrings,
-including auto-generated class and module diagrams.
+In ``Notebooks/quickstart.ipynb`` a small introduction is given on how JUNE Germany works. It is
+mostly the same as in the original JUNE project.
 
 # Tests
-
 Run the tests with
 
 ```
 cd test_june
 pytest
 ```
+
+# Thanks
+We would like to thank the original authors of the JUNE project for laying the groundwork of this
+project and their support for adapting it to Germany.
