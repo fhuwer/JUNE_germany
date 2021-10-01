@@ -1,4 +1,0 @@
-[submodule "data"]
-	path = data
-	url = git@github.com:fneuhaus/june_data_germany.git
-	branch = master
