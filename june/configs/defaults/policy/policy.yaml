@@ -68,185 +68,135 @@ tiered_lockdown:
       Schleswig-Holstein: 1.
       Thueringen: 1.
 
+      hospitalisation:
+    start_time: 1000-01-01
+    end_time: 9999-01-01
+
 limit_long_commute:
-  # prevents people that have their workplace
-  # far away from their homes of commuting daily.
-  start_time: 1000-01-01
-  end_time: 9999-01-01
-  apply_from_distance: 100
-  going_to_work_probability: 0.2 # once a week
+    #prevents people that have their workplace
+    #far away from their homes of commuting daily.
+    #does not apply to Germany
+    start_time: 1000-01-01
+    end_time: 9999-01-01
+    apply_from_distance: 2000
+    going_to_work_probability: 1.0 #every day
 
 quarantine:
     1:
-        n_days: 7 # for the symptomatic person
+        n_days: 14 # for the symptomatic person - from BfG
         n_days_household: 14 # for the housemates
-        compliance: 0.5 
-        household_compliance: 0.2
-        testing_compliance: 0.5 # to be discussed
-        start_time: 2020-03-16 
-        end_time: 2020-03-24 
+        compliance: 0.95 
+        household_compliance: 0.9
+        start_time: 2020-02-26 
+        end_time: 2020-03-22 
     2:
-        n_days: 7 # for the symptomatic person
+        n_days: 10 # for the symptomatic person
         n_days_household: 14 # for the housemates
         compliance: 0.95 # for the symptomatic individual - needs to be checked
         household_compliance: 0.9
-        testing_compliance: 0.5 # to be discussed
-        start_time: 2020-03-24
+        start_time: 2020-03-22
         end_time: 2021-07-04
 
 shielding:
     1:
-        min_age: 70
-        compliance: 0.2
-        start_time: 2020-03-16 
-        end_time: 2020-03-24
+        min_age: 60
+        compliance: 0.6
+        start_time: 2020-03-01 
+        end_time: 2020-03-22
     2:
-        min_age: 70
-        compliance: 0.7
-        start_time: 2020-03-24
-        end_time: 2020-08-01
+        min_age: 60
+        compliance: 0.5
+        start_time: 2020-03-22
+        end_time: 2020-05-06
     3:
-        min_age: 70
-        compliance: 0.7
-        start_time: 2020-11-05
-        end_time: 2020-12-03
-
+        min_age: 60
+        compliance: 0.6
+        start_time: 2020-05-06
+        end_time: 2020-10-28
+    4:
+        min_age: 60
+        compliance: 0.5
+        start_time: 2020-10-28
+        end_time: 2021-03-01
 
 close_companies:
     1:
-        start_time: 2020-03-16
-        end_time: 2020-03-20
+        start_time: 2020-03-08
+        end_time: 2020-03-22
         full_closure: False 
-        avoid_work_probability: 0.20 # prob of avoiding workplace if still working (YouGov)
-        furlough_probability: 0.04 # prob of being furloughed (Statista)
-        key_probability: 0.22 # prob of being a key worker (ONS)
+        avoid_work_probability: 0.04 # prob of being in homeoffice if still working
+        furlough_probability: 0.04 # prob of being furloughed/business closed
+        key_probability: 0.19 # prob of being a key worker
     2:
-        start_time: 2020-03-20
-        end_time: 2020-03-27
+        start_time: 2020-03-22
+        end_time: 2020-05-31
         full_closure: False 
-        avoid_work_probability: 0.29
-        furlough_probability: 0.04
+        avoid_work_probability: 0.27
+        furlough_probability: 0.30
         key_probability: 0.19
     3:
-        start_time: 2020-03-27
-        end_time: 2020-04-17
+        start_time: 2020-06-01
+        end_time: 2020-06-30
         full_closure: False 
-        avoid_work_probability: 0.38
+        avoid_work_probability: 0.16
         furlough_probability: 0.04
         key_probability: 0.19
     4:
-        start_time: 2020-04-17
-        end_time: 2020-05-01
+        start_time: 2020-07-01
+        end_time: 2020-10-31
         full_closure: False 
-        avoid_work_probability: 0.36
-        furlough_probability: 0.1
+        avoid_work_probability: 0.15 #by interpolation
+        furlough_probability: 0.04
         key_probability: 0.19
     5:
-        start_time: 2020-05-01
-        end_time: 2020-05-15
+        start_time: 2020-11-01
+        end_time: 2020-11-30
         full_closure: False 
-        avoid_work_probability: 0.35
-        furlough_probability: 0.25
+        avoid_work_probability: 0.14
+        furlough_probability: 0.2
         key_probability: 0.19
     6:
-        start_time: 2020-05-15
-        end_time: 2020-06-16
+        start_time: 2020-12-01
+        end_time: 2020-12-31
         full_closure: False 
-        avoid_work_probability: 0.31
-        furlough_probability: 0.30
+        avoid_work_probability: 0.17
+        furlough_probability: 0.34
         key_probability: 0.19
     7:
-        start_time: 2020-06-16
-        end_time: 2020-07-12
+        start_time: 2021-01-01
+        end_time: 2021-01-31
         full_closure: False 
-        avoid_work_probability: 0.25
-        furlough_probability: 0.33
-        key_probability: 0.19
-    8:
-        start_time: 2020-07-12
-        end_time: 2020-07-26
-        full_closure: False 
-        avoid_work_probability: 0.21
-        furlough_probability: 0.34
-        key_probability: 0.19
-    9:
-        start_time: 2020-07-26
-        end_time: 2020-08-07
-        full_closure: False 
-        avoid_work_probability: 0.20
-        furlough_probability: 0.34
-        key_probability: 0.19
-    10:
-        start_time: 2020-08-07
-        end_time: 2020-08-12
-        full_closure: False 
-        avoid_work_probability: 0.20
-        furlough_probability: 0.34
-        key_probability: 0.19
-    11:
-        start_time: 2020-08-12
-        end_time: 2020-08-25
-        full_closure: False 
-        avoid_work_probability: 0.18
-        furlough_probability: 0.34
-        key_probability: 0.19
-    12:
-        start_time: 2020-08-25
-        end_time: 2020-09-09
-        full_closure: False 
-        avoid_work_probability: 0.15
-        furlough_probability: 0.34
-        key_probability: 0.19
-    13:
-        start_time: 2020-09-09
-        end_time: 2020-11-05
-        full_closure: False 
-        avoid_work_probability: 0.135
-        furlough_probability: 0.34
-        key_probability: 0.19
-    14:
-        start_time: 2020-11-05
-        end_time: 2020-12-03
-        full_closure: False 
-        avoid_work_probability: 0.38
-        furlough_probability: 0.34
-        key_probability: 0.19
-    15:
-        start_time: 2020-12-03
-        end_time: 2021-12-01
-        full_closure: False 
-        avoid_work_probability: 0.135
+        avoid_work_probability: 0.24
         furlough_probability: 0.34
         key_probability: 0.19
 
 social_distancing:
     1: 
-        start_time: 2020-03-16
-        end_time: 2020-03-24 
+        start_time: 2020-03-08
+        end_time: 2020-03-22 
         beta_factors:
-            box: 0.875
-            pub: 0.875
-            grocery: 0.875
-            cinema: 0.875
-            gym: 0.875
-            city_transport: 0.875
-            inter_city_transport: 0.875
-            hospital: 0.875
-            care_home: 0.875
-            company: 0.875
-            school: 0.875
+            box: 0.95
+            pub: 0.95
+            grocery: 0.95
+            cinema: 0.95
+            city_transport: 0.95
+            inter_city_transport: 0.95
+            hospital: 0.95
+            care_home: 0.95
+            company: 0.95
+            school: 0.95
             household: 1.0
-            university: 0.875
+            university: 0.95
+            household_visits: 0.95
 
     2:
-        start_time: 2020-03-24
-        end_time: 2020-05-11 
+        start_time: 2020-03-22
+        end_time: 2020-05-06
         beta_factors:
             box: 0.75
             pub: 0.75
             grocery: 0.75
             cinema: 0.75
-            gym: 0.75
             city_transport: 0.75
             inter_city_transport: 0.75
             hospital: 0.75
@@ -256,14 +206,13 @@ social_distancing:
             household: 1.0
             university: 0.75
     3:
-        start_time: 2020-05-11
-        end_time: 2020-07-04
+        start_time: 2020-05-06
+        end_time: 2020-10-07
         beta_factors:
             box: 0.786
             pub: 0.786
             grocery: 0.786
             cinema: 0.786
-            gym: 0.786
             city_transport: 0.786
             inter_city_transport: 0.786
             hospital: 0.786
@@ -274,14 +223,13 @@ social_distancing:
             university: 0.786
             household_visits: 0.5
     4:
-        start_time: 2020-07-04 
-        end_time: 2021-11-05
+        start_time: 2020-10-07 
+        end_time: 2021-10-28
         beta_factors:
             box: 0.875
             pub: 0.875
             grocery: 0.875
             cinema: 0.875
-            gym: 0.875
             city_transport: 0.875
             inter_city_transport: 0.875
             hospital: 0.875
@@ -292,14 +240,13 @@ social_distancing:
             university: 0.875
             household_visits: 0.5
     5:
-        start_time: 2020-11-05
-        end_time: 2020-12-03
+        start_time: 2020-10-28
+        end_time: 2020-11-25
         beta_factors:
             box: 0.75
             pub: 0.75
             grocery: 0.75
             cinema: 0.75
-            gym: 0.75
             city_transport: 0.75
             inter_city_transport: 0.75
             hospital: 0.75
@@ -311,14 +258,31 @@ social_distancing:
             household_visits: 0.5
 
     6:
-        start_time: 2020-12-03
-        end_time: 2021-12-01
+        start_time: 2020-11-25
+        end_time: 2020-12-13
         beta_factors:
             box: 0.875
             pub: 0.875
             grocery: 0.875
             cinema: 0.875
-            gym: 0.875
+            city_transport: 0.875
+            inter_city_transport: 0.875
+            hospital: 0.875
+            care_home: 0.875
+            company: 0.875
+            school: 0.875
+            household: 1.0
+            university: 0.875
+            household_visits: 0.5
+            
+    7:
+        start_time: 2020-12-13
+        end_time: 2021-03-01
+        beta_factors:
+            box: 0.875
+            pub: 0.875
+            grocery: 0.875
+            cinema: 0.875
             city_transport: 0.875
             inter_city_transport: 0.875
             hospital: 0.875
@@ -331,269 +295,146 @@ social_distancing:
 
 mask_wearing:
     1: 
-        start_time: 2020-03-27
-        end_time: 2020-04-24
-        compliance: 0.09 # overall mask wearing compliance (YouGov)
+        start_time: 2020-03-08
+        end_time: 2020-03-22
+        compliance: 0.04 # overall mask wearing compliance
         beta_factor: 0.5 # overall beta reducion if mask wearing
-        mask_probabilities: # given a mask is work, probability of where it is worn
+        mask_probabilities: # probability of where it is worn
             box: 1.
             pub: 0.
-            grocery: 0.5
+            grocery: 0.04
             cinema: 0.
-            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
-            company: 0.5
+            hospital: 1.
+            care_home: 1.
+            company: 0.04
             school: 0.
             household: 0.
             university: 0.5
     2: 
-        start_time: 2020-04-24
-        end_time: 2020-05-21
-        compliance: 0.17
+        start_time: 2020-03-22
+        end_time: 2020-04-27
+        compliance: 0.04
         beta_factor: 0.5
         mask_probabilities:
             box: 1.
             pub: 0.
-            grocery: 0.5
+            grocery: 0.04
             cinema: 0.
-            gym: 0.
             inter_city_transport: 1.
             city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
-            company: 0.5
+            hospital: 1.
+            care_home: 1.
+            company: 0.04
             school: 0.
             household: 0.
-            university: 0.5
+            university: 0.04
     3: 
-        start_time: 2020-05-21
-        end_time: 2020-06-16
-        compliance: 0.23
+        start_time: 2020-04-27
+        end_time: 2020-05-06
+        compliance: 0.95
         beta_factor: 0.5
         mask_probabilities: 
             box: 1.
             pub: 0.
-            grocery: 0.5
-            cinema: 0.
-            gym: 0.
+            grocery: 1.
+            cinema: 1.
             inter_city_transport: 1.
             city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
+            hospital: 1.
+            care_home: 1.
             company: 0.5
-            school: 0.
+            school: 0.5
             household: 0.
             university: 0.5
     4: 
-        start_time: 2020-06-16
-        end_time: 2020-06-25
-        compliance: 0.29
+        start_time: 2020-05-06
+        end_time: 2020-10-28
+        compliance: 0.9
         beta_factor: 0.5
         mask_probabilities: 
             box: 1.
             pub: 0.
-            grocery: 0.5
-            cinema: 0.
-            gym: 0.
+            grocery: 1.
+            cinema: 1.
             inter_city_transport: 1.
             city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
+            hospital: 1.
+            care_home: 1.
             company: 0.5
-            school: 0.
+            school: 0.5
             household: 0.
             university: 0.5
     5: 
-        start_time: 2020-06-25
-        end_time: 2020-07-12
-        compliance: 0.35
+        start_time: 2020-10-28
+        end_time: 2020-12-13
+        compliance: 0.95
         beta_factor: 0.5
         mask_probabilities: 
             box: 1.
             pub: 0.
-            grocery: 0.5
-            cinema: 0.
-            gym: 0.
+            grocery: 1.
+            cinema: 1.
             inter_city_transport: 1.
             city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
+            hospital: 1.
+            care_home: 1.
             company: 0.5
-            school: 0.
+            school: 0.5
             household: 0.
             university: 0.5
     6: 
-        start_time: 2020-07-12
-        end_time: 2020-07-24
-        compliance: 0.48
+        start_time: 2020-12-13
+        end_time: 2021-01-25
+        compliance: 0.95
         beta_factor: 0.5
         mask_probabilities: 
             box: 1.
             pub: 0.
-            grocery: 0.5
-            cinema: 0.
-            gym: 0.
+            grocery: 1.
+            cinema: 1.
             inter_city_transport: 1.
             city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
+            hospital: 1.
+            care_home: 1.
             company: 0.5
-            school: 0.
+            school: 1.
             household: 0.
             university: 0.5
     7: 
-        start_time: 2020-07-24
-        end_time: 2020-07-26
-        compliance: 0.48
+        start_time: 2021-01-25
+        end_time: 2020-03-01
+        compliance: 0.95
         beta_factor: 0.5
         mask_probabilities: 
             box: 1.
             pub: 0.
             grocery: 1.
-            cinema: 0.
-            gym: 0.
+            cinema: 1.
             inter_city_transport: 1.
             city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
+            hospital: 1.
+            care_home: 1.
             company: 0.5
-            school: 0.
+            school: 1.
             household: 0.
             university: 0.5
-    8: 
-        start_time: 2020-07-26
-        end_time: 2020-07-31
-        compliance: 0.63
-        beta_factor: 0.5
-        mask_probabilities: 
-            box: 1.
-            pub: 0.
-            grocery: 1.
-            cinema: 0.
-            gym: 0.
-            inter_city_transport: 1.
-            city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
-            company: 0.5
-            school: 0.
-            household: 0.
-            university: 0.5
-    9: 
-        start_time: 2020-07-31
-        end_time: 2020-08-07
-        compliance: 0.67
-        beta_factor: 0.5
-        mask_probabilities: 
-            box: 1.
-            pub: 0.
-            grocery: 1.
-            cinema: 0.
-            gym: 0.
-            inter_city_transport: 1.
-            city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
-            company: 0.5
-            school: 0.
-            household: 0.
-            university: 0.5
-    10: 
-        start_time: 2020-08-07
-        end_time: 2020-08-12
-        compliance: 0.70
-        beta_factor: 0.5
-        mask_probabilities: 
-            box: 1.
-            pub: 0.
-            grocery: 1.
-            cinema: 0.
-            gym: 0.
-            inter_city_transport: 1.
-            city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
-            company: 0.5
-            school: 0.
-            household: 0.
-            university: 0.5
-    11: 
-        start_time: 2020-08-12
-        end_time: 2020-08-25
-        compliance: 0.745
-        beta_factor: 0.5
-        mask_probabilities: 
-            box: 1.
-            pub: 0.
-            grocery: 1.
-            cinema: 0.
-            gym: 0.
-            inter_city_transport: 1.
-            city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
-            company: 0.5
-            school: 0.
-            household: 0.
-            university: 0.5
-    12: 
-        start_time: 2020-08-25
-        end_time: 2020-09-08
-        compliance: 0.725
-        beta_factor: 0.5
-        mask_probabilities: 
-            box: 1.
-            pub: 0.
-            grocery: 1.
-            cinema: 0.
-            gym: 0.
-            inter_city_transport: 1.
-            city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
-            company: 0.5
-            school: 0.
-            household: 0.
-            university: 0.5
-    13: 
-        start_time: 2020-09-08
-        #end_time: 2020-09-16
-        end_time: 2021-12-01
-        compliance: 0.735
-        beta_factor: 0.5
-        mask_probabilities: 
-            box: 1.
-            pub: 0.
-            grocery: 1.
-            cinema: 0.
-            gym: 0.
-            inter_city_transport: 1.
-            city_transport: 1.
-            hospital: 0.
-            care_home: 0.5
-            company: 0.5
-            school: 0.
-            household: 0.
-            university: 0.5
-
 
 close_leisure_venue:
     1:
-        start_time: 2020-03-21
-        end_time: 2020-07-04 
-        venues_to_close: ['pub', 'cinema', 'gym', 'care_home_visit']
+        start_time: 2020-03-22
+        end_time: 2020-05-06 
+        venues_to_close: ['pub', 'cinema', 'care_home_visit']
     2:
-        start_time: 2020-11-05
-        end_time: 2020-12-03 
-        venues_to_close: ['pub', 'cinema', 'gym', 'care_home_visit'] 
+        start_time: 2020-10-28
+        end_time: 2021-03-01 
+        venues_to_close: ['pub', 'cinema', 'care_home_visit'] 
 
 change_leisure_probability:
     1:
-        start_time: 2020-03-24
-        end_time: 2020-05-21
+        start_time: 2020-03-22
+        end_time: 2020-05-06
         leisure_poisson_parameters:
             household_visits:
                 men: 
@@ -608,8 +449,8 @@ change_leisure_probability:
                 women:
                     0-100: 0.05
     2:
-        start_time: 2020-05-21
-        end_time: 2020-05-31
+        start_time: 2020-05-06
+        end_time: 2020-10-31
         leisure_poisson_parameters:
             household_visits:
                 men: 
@@ -624,221 +465,57 @@ change_leisure_probability:
                 women:
                     0-100: 0.05
     3:
-        start_time: 2020-05-31
-        end_time: 2020-06-04
+        start_time: 2020-11-01
+        end_time: 2020-12-01
         leisure_poisson_parameters:
             household_visits:
                 men: 
-                    0-64: 0.50
-                    65-100: 0.25
+                    0-64: 0.2
+                    65-100: 0.2
                 women: 
-                    0-64: 0.50
-                    65-100: 0.25
+                    0-64: 0.2
+                    65-100: 0.2
             care_home_visits:
                 men:
                     0-100: 0.05
                 women:
                     0-100: 0.05
     4:
-        start_time: 2020-06-04
-        end_time: 2020-06-14
+        start_time: 2020-12-01
+        end_time: 2021-02-28
         leisure_poisson_parameters:
             household_visits:
                 men: 
-                    0-64: 0.7
-                    65-100: 0.35
+                    0-64: 0.07
+                    65-100: 0.07
                 women: 
-                    0-64: 0.7
-                    65-100: 0.35
+                    0-64: 0.07
+                    65-100: 0.07
             care_home_visits:
                 men:
                     0-100: 0.05
                 women:
                     0-100: 0.05
     5:
-        start_time: 2020-06-14
-        end_time: 2020-07-04
+        start_time: 2021-03-01
+        end_time: 2020-03-31
         leisure_poisson_parameters:
             household_visits:
                 men: 
-                    0-64: 1.25
-                    65-100: 0.625
+                    0-64: 0.10
+                    65-100: 0.10
                 women: 
-                    0-64: 1.25
-                    65-100: 0.625
+                    0-64: 0.10
+                    65-100: 0.10
             care_home_visits:
                 men:
                     0-100: 0.05
                 women:
                     0-100: 0.05
-
-    6:
-        start_time: 2020-07-04
-        end_time: 2020-07-11
-        leisure_poisson_parameters:
-            pubs:
-                men:
-                    18-65: 0.256
-                    65-100: 0.170
-                women:
-                    18-65: 0.256
-                    65-100: 0.170
-            household_visits:
-                men: 
-                    0-64: 1.4
-                    65-100: 0.7
-                women: 
-                    0-64: 1.4
-                    65-100: 0.7
-
-    7:
-        start_time: 2020-07-11
-        end_time: 2020-07-18
-        leisure_poisson_parameters:
-            pubs:
-                men:
-                    18-65: 0.402
-                    65-100: 0.268
-                women:
-                    18-65: 0.402
-                    65-100: 0.268
-            household_visits:
-                men: 
-                    0-64: 1.4
-                    65-100: 0.7
-                women: 
-                    0-64: 1.4
-                    65-100: 0.7
-
-
-    8:
-        start_time: 2020-07-18
-        end_time: 2020-07-25
-        leisure_poisson_parameters:
-            pubs:
-                men:
-                    18-65: 0.548
-                    65-100: 0.366
-                women:
-                    18-65: 0.548
-                    65-100: 0.366
-            household_visits:
-                men: 
-                    0-64: 1.4
-                    65-100: 0.7
-                women: 
-                    0-64: 1.4
-                    65-100: 0.7
-
-
-    9:
-        start_time: 2020-07-25
-        end_time: 2020-08-01
-        leisure_poisson_parameters:
-            pubs:
-                men:
-                    18-65: 0.695
-                    65-100: 0.463
-                women:
-                    18-65: 0.695
-                    65-100: 0.463
-            household_visits:
-                men: 
-                    0-64: 1.4
-                    65-100: 0.7
-                women: 
-                    0-64: 1.4
-                    65-100: 0.7
-
-
-    10:
-        start_time: 2020-08-01
-        end_time: 2020-08-08
-        leisure_poisson_parameters:
-            pubs:
-                men:
-                    18-65: 0.841
-                    65-100: 0.561
-                women:
-                    18-65: 0.841
-                    65-100: 0.561
-            household_visits:
-                men: 
-                    0-64: 1.4
-                    65-100: 0.7
-                women: 
-                    0-64: 1.4
-                    65-100: 0.7
-
-
-    11:
-        start_time: 2020-08-08
-        end_time: 2020-08-15
-        leisure_poisson_parameters:
-            pubs:
-                men:
-                    18-65: 0.988
-                    65-100: 0.659
-                women:
-                    18-65: 0.988
-                    65-100: 0.659
-
-    12:
-        start_time: 2020-08-15
-        end_time: 2020-08-22
-        leisure_poisson_parameters:
-            pubs:
-                men:
-                    18-65: 1.13
-                    65-100: 0.756
-                women:
-                    18-65: 1.13
-                    65-100: 0.756
-
-    13:
-        start_time: 2020-08-22
-        end_time: 2020-08-29
-        leisure_poisson_parameters:
-            pubs:
-                men:
-                    18-65: 1.28
-                    65-100: 0.854
-                women:
-                    18-65: 1.28
-                    65-100: 0.854
-
-    14:
-        start_time: 2020-08-29
-        end_time: 2020-08-31
-        leisure_poisson_parameters:
-            pubs:
-                men:
-                    18-65: 1.38
-                    65-100: 0.917
-                women:
-                    18-65: 1.38
-                    65-100: 0.917
-    15:
-        start_time: 2020-11-05
-        end_time: 2020-12-03
-        leisure_poisson_parameters:
-            household_visits:
-                men: 
-                    0-64: 0.1
-                    65-100: 0.05
-                women: 
-                    0-64: 0.1
-                    65-100: 0.05
-            care_home_visits:
-                men:
-                    0-100: 0.05
-                women:
-                    0-100: 0.05
-
 
 close_schools:
     1:
-        start_time: 2020-03-20
+        start_time: 2020-03-16 #source RKI
         end_time: 2020-06-01
         years_to_close: all
         full_closure: False
@@ -883,11 +560,15 @@ close_schools:
         years_to_close: all
         full_closure: False
     9:
-        start_time: 2020-12-19
+        start_time: 2020-12-13
         end_time: 2021-01-03
         years_to_close: all
         full_closure: True
 
 close_universities:
-    start_time: 2020-03-20
-    end_time: 2021-09-28
+    1:
+        start_time: 2020-03-17 #based on JGU, but varies by region
+        end_time: 2020-08-01
+    2:
+        start_time: 2020-12-13
+        end_time: 2021-03-01
